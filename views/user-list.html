@@ -44,9 +44,9 @@
         <thead>
         <tr>
             <th lay-data="{field:'username', width:120, edit: 'text'}">用户名</th>
-            <th lay-data="{field:'gender', width:120}">性别</th>
-            <th lay-data="{field:'password', width:120}">密码</th>
-            <th lay-data="{field:'address'}">地址</th>
+            <th lay-data="{field:'gender', width:120, edit:  'text'}">性别</th>
+            <th lay-data="{field:'password', width:120, edit: 'text'}">密码</th>
+            <th lay-data="{field:'address', edit: 'text'}">地址</th>
         </tr>
         </thead>
     </table>
@@ -101,10 +101,11 @@
             xhr.onload = function(){
                 if(xhr.status >= 200 && xhr.status < 300 || xhr.status == 304) {
                     console.log(xhr.responseText);
+                    layer.msg('[ID: '+ data.Id +'] ' + field + ' 字段更改为：'+ value);
                 }
             };
             xhr.send(formData);
-            layer.msg('[ID: '+ data.Id +'] ' + field + ' 字段更改为：'+ value);
+
         });
 
         //头工具栏事件

@@ -145,19 +145,36 @@ func Updateuser(g *gin.Context) {
 	id := g.PostForm("id")
 	oldId, err := primitive.ObjectIDFromHex(id)
 	newUsername := g.PostForm("username")
-
+	newpassword := g.PostForm("password")
+	newgender, err := strconv.Atoi(g.PostForm("gender"))
 	user := new(User)
 	user.Id = oldId
-	user.Username = newUsername
+
+	oldInfo := mgo.Collection(db.User).FindOne(context.Background(), bson.M{"_id": oldId})
+	if oldInfo != nil {
+		oldInfo.Decode(user)
+	}
+	if newUsername != "" {
+		user.Username = newUsername
+	}
+	if newpassword != "" {
+		user.Password = newpassword
+	}
+	if newgender != 0 {
+		user.Gender = newgender
+	}
 
 	//info, err := mgo.Collection(db.User).UpdateOne(context.Background(), bson.M{"_id": bsonx.ObjectID(oldId)},
 	//	bson.M{"$set": bson.M{"username": newUsername}})
 	//
 	info := mgo.Collection(db.User).FindOneAndReplace(context.Background(), bson.M{"_id": oldId},
 		user)
-	//if info.Err().Error()!=""{
-	//	fmt.Println(info.Err().Error())
-	//}
+	if info.Err() != nil {
+		rsp.Msg = info.Err().Error()
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
 	fmt.Println(info)
 	if err == nil {
 		//fmt.Println(info.MatchedCount)
