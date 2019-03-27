@@ -1,3 +1,7 @@
 # go env
 export GOROOT=/opt/go
 export GOBIN=$GOROOT/bin
+
+不错的文章：
+
+http://www.cnblogs.com/wdliu/p/9272220.html
