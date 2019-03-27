@@ -72,8 +72,3 @@ func Readfile(g *gin.Context) {
 	str := string(b)
 	fmt.Println(str)
 }
-
-/* */
-func Wirterfile() {
-
-}

@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/mongodb/mongo-go-driver/bson"
+	"github.com/mongodb/mongo-go-driver/bson/primitive"
+	"github.com/mongodb/mongo-go-driver/x/bsonx"
 	"myProject/db"
 	"net/http"
 	"strconv"
@@ -125,6 +127,7 @@ func Getalluser(g *gin.Context) {
 			}
 		}
 	}
+
 	rsp.Msg = "success"
 	rsp.Code = 0
 	rsp.Data = users
@@ -140,9 +143,11 @@ func Updateuser(g *gin.Context) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	username := g.PostForm("username")
-	newUsername := g.PostForm("username") + "_new"
-	info, err := mgo.Collection(db.User).UpdateOne(context.Background(), bson.M{"username": username},
+	id := g.PostForm("id")
+	oldId, err := primitive.ObjectIDFromHex(id)
+	newUsername := g.PostForm("username")
+
+	info, err := mgo.Collection(db.User).UpdateOne(context.Background(), bson.M{"_id": bsonx.ObjectID(oldId)},
 		bson.M{"$set": bson.M{"username": newUsername}})
 	if err == nil {
 		fmt.Println(info.MatchedCount)

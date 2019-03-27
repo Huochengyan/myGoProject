@@ -43,10 +43,10 @@
     <table class="layui-table" lay-data="{url:'http://127.0.0.1:8888/user/getalluser',page:true,toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
         <thead>
         <tr>
-            <th lay-data="{field:'username', width:120}">用户名</th>
-            <th lay-data="{field:'gender', width:80}">性别</th>
+            <th lay-data="{field:'username', width:120, edit: 'text'}">用户名</th>
+            <th lay-data="{field:'gender', width:120}">性别</th>
             <th lay-data="{field:'password', width:120}">密码</th>
-            <th lay-data="{field:'address', edit: 'text'}">城市</th>
+            <th lay-data="{field:'address'}">地址</th>
         </tr>
         </thead>
     </table>
@@ -92,7 +92,19 @@
             var value = obj.value //得到修改后的值
                 ,data = obj.data //得到所在行所有键值
                 ,field = obj.field; //得到字段
-            // layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+
+            var formData=new FormData();
+            formData.append("id",obj.data.Id);
+            formData.append(obj.field.toString(),obj.value.toString());
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', location.origin+'/user/updateuser');
+            xhr.onload = function(){
+                if(xhr.status >= 200 && xhr.status < 300 || xhr.status == 304) {
+                    console.log(xhr.responseText);
+                }
+            };
+            xhr.send(formData);
+            layer.msg('[ID: '+ data.Id +'] ' + field + ' 字段更改为：'+ value);
         });
 
         //头工具栏事件
