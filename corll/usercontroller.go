@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mongodb/mongo-go-driver/bson"
 	"github.com/mongodb/mongo-go-driver/bson/primitive"
-	"github.com/mongodb/mongo-go-driver/x/bsonx"
 	"myProject/db"
 	"net/http"
 	"strconv"
@@ -147,10 +146,21 @@ func Updateuser(g *gin.Context) {
 	oldId, err := primitive.ObjectIDFromHex(id)
 	newUsername := g.PostForm("username")
 
-	info, err := mgo.Collection(db.User).UpdateOne(context.Background(), bson.M{"_id": bsonx.ObjectID(oldId)},
-		bson.M{"$set": bson.M{"username": newUsername}})
+	user := new(User)
+	user.Id = oldId
+	user.Username = newUsername
+
+	//info, err := mgo.Collection(db.User).UpdateOne(context.Background(), bson.M{"_id": bsonx.ObjectID(oldId)},
+	//	bson.M{"$set": bson.M{"username": newUsername}})
+	//
+	info := mgo.Collection(db.User).FindOneAndReplace(context.Background(), bson.M{"_id": oldId},
+		user)
+	//if info.Err().Error()!=""{
+	//	fmt.Println(info.Err().Error())
+	//}
+	fmt.Println(info)
 	if err == nil {
-		fmt.Println(info.MatchedCount)
+		//fmt.Println(info.MatchedCount)
 	}
 	rsp.Msg = "success"
 	rsp.Code = 200
