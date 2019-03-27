@@ -51,7 +51,10 @@ func main() {
 
 	}
 
-	router.Run(":8888") // listen and serve on 0.0.0.0:8080
+	err := router.Run(":8888") // listen and serve on 0.0.0.0:8080
+	if err != nil {
+		panic(err)
+	}
 	fmt.Println("strart ......")
 
 	//调用浏览器打开页面
