@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/pkg/browser"
 	"io"
 	"myProject/corll"
 	"os"
+	"os/exec"
+	"runtime"
 )
 
 func main() {
@@ -49,4 +52,19 @@ func main() {
 
 	router.Run(":8888") // listen and serve on 0.0.0.0:8080
 	fmt.Println("strart ......")
+
+	//调用浏览器打开页面
+	//OpenUrl("https://www.baidu.com")
+	//browser.OpenURL("http://www.baidu.com")
+}
+
+var commands = map[string]string{
+	"windows": "cmd /c start",
+	"darwin":  "open",
+	"linux":   "xdg-open",
+}
+
+func OpenUrl(uri string) {
+	run, _ := commands[runtime.GOOS]
+	exec.Command(run, uri).Start()
 }
