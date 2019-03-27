@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/pkg/browser"
+	//"github.com/pkg/browser"
 	"io"
 	"myProject/corll"
 	"os"
@@ -47,6 +47,7 @@ func main() {
 	{
 		v2.POST("/uploadfile", corll.Uploadfile)
 		v2.GET("/downloadfile", corll.Downloadfile)
+		v2.GET("/readfile", corll.Readfile)
 
 	}
 

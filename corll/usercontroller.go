@@ -186,5 +186,3 @@ func Deluser(g *gin.Context) {
 		return
 	}
 }
-
-/* */

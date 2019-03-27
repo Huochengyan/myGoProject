@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -60,4 +61,19 @@ func Downloadfile(g *gin.Context) {
 	g.Header("Pragma", "public")
 	g.Header("content-disposition", `attachment; filename=`+"upload/1.jpg")
 	g.File("upload/1.jpg")
+}
+
+/* read file  */
+func Readfile(g *gin.Context) {
+	b, err := ioutil.ReadFile("gopath.txt")
+	if err != nil {
+		fmt.Print(err)
+	}
+	str := string(b)
+	fmt.Println(str)
+}
+
+/* */
+func Wirterfile() {
+
 }
