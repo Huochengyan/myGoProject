@@ -42,6 +42,7 @@ func main() {
 		v1.POST("/insertuser", corll.Insertuser)
 		v1.POST("/queryalluser", corll.Queryalluser)
 		v1.GET("/getalluser", corll.Getalluser)
+		v1.GET("/QueryByUsername", corll.QueryByUsername)
 		v1.POST("/updateuser", corll.Updateuser)
 		v1.POST("/deluser", corll.Deluser)
 	}

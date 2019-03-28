@@ -92,6 +92,35 @@ func Queryalluser(g *gin.Context) {
 	return
 }
 
+/*  模糊查询 query  by username */
+func QueryByUsername(g *gin.Context) {
+	rsp := new(Rsp)
+	fmt.Println(".....QueryByUsername..")
+	username := g.Query("username")
+	mgo := db.InitMongoDB()
+	fmt.Println(username)
+
+	filter := bson.M{"username": bson.M{"$regex": username, "$options": "$i"}}
+
+	cur, err := mgo.Collection(db.User).Find(context.Background(), filter)
+	if err != nil {
+		fmt.Println(err)
+	}
+	var users []User
+	for cur.Next(context.Background()) {
+		elme := new(User)
+		err := cur.Decode(elme)
+		if err == nil {
+			users = append(users, *elme)
+		}
+	}
+	rsp.Msg = "success"
+	rsp.Code = 200
+	rsp.Data = users
+	g.JSON(http.StatusOK, rsp)
+	return
+}
+
 /* get all user */
 func Getalluser(g *gin.Context) {
 	log.Println("Getalluser.........")
