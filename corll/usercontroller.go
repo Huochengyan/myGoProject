@@ -13,7 +13,7 @@ import (
 	"strconv"
 )
 
-/*login*/
+/*login user*/
 func Login(g *gin.Context) {
 	fmt.Println("login.........")
 	rsp := new(Rsp)
