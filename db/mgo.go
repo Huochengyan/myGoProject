@@ -7,11 +7,11 @@ import (
 )
 
 /* mongodb */
-func InitMongoDB() (collection *mongo.Database, err error) {
+func InitMongoDB() (collection *mongo.Database) {
 	if Mgo == nil {
 		Mgo = connectDB()
 	}
-	return Mgo, nil
+	return Mgo
 }
 
 var Mgo *mongo.Database
