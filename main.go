@@ -27,7 +27,9 @@ func main() {
 	//-----------------------------------------------------------
 	//渲染html页面
 	// 静态资源加载，本例为css,js以及资源图片
-	router.Static("views", "views")
+	router.Static("static", "static")
+
+	//router.Static("static/*")
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
