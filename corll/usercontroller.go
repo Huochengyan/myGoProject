@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/mongodb/mongo-go-driver/bson"
+	"github.com/mongodb/mongo-go-driver/bson/primitive"
+	"github.com/mongodb/mongo-go-driver/mongo/options"
+	"log"
 	"myProject/db"
 	"net/http"
 	"strconv"
@@ -97,7 +100,7 @@ func Queryalluser(g *gin.Context) {
 
 /* get all user */
 func Getalluser(g *gin.Context) {
-	fmt.Println("Getalluser.........")
+	log.Println("Getalluser.........")
 	rsp := new(Rsp)
 	mgo, err := db.InitMongoDB()
 	if err != nil {
@@ -114,8 +117,15 @@ func Getalluser(g *gin.Context) {
 		filter = bson.M{"username": username}
 	}
 
+	//排序 正序1 倒序-1  ----------------------------
+	opts := new(options.FindOptions)
+	sortMap := make(map[string]interface{})
+	sortMap["gender"] = -1
+	opts.Sort = sortMap
+	//排序 正序1 倒序-1  ----------------------------
+
 	var users []User
-	cur, err := mgo.Collection(db.User).Find(context.Background(), filter, nil)
+	cur, err := mgo.Collection(db.User).Find(context.Background(), filter, opts)
 	if err == nil {
 		for cur.Next(context.Background()) {
 			elme := new(User)
@@ -125,6 +135,7 @@ func Getalluser(g *gin.Context) {
 			}
 		}
 	}
+
 	rsp.Msg = "success"
 	rsp.Code = 0
 	rsp.Data = users
@@ -140,12 +151,45 @@ func Updateuser(g *gin.Context) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	username := g.PostForm("username")
-	newUsername := g.PostForm("username") + "_new"
-	info, err := mgo.Collection(db.User).UpdateOne(context.Background(), bson.M{"username": username},
-		bson.M{"$set": bson.M{"username": newUsername}})
+	id := g.PostForm("id")
+	oldId, err := primitive.ObjectIDFromHex(id)
+	newpassword := g.PostForm("password")
+	newgender, err := strconv.Atoi(g.PostForm("gender"))
+
+	user := new(User)
+	user.Id = oldId
+
+	oldInfo := mgo.Collection(db.User).FindOne(context.Background(), bson.M{"_id": oldId})
+	if oldInfo != nil {
+		oldInfo.Decode(user)
+	}
+	if g.PostForm("username") != "" {
+		user.Username = g.PostForm("username")
+	}
+	if newpassword != "" {
+		user.Password = newpassword
+	}
+	if newgender != 0 {
+		user.Gender = newgender
+	}
+	if g.PostForm("address") != "" {
+		user.Address = g.PostForm("address")
+	}
+
+	//info, err := mgo.Collection(db.User).UpdateOne(context.Background(), bson.M{"_id": bsonx.ObjectID(oldId)},
+	//	bson.M{"$set": bson.M{"username": newUsername}})
+	//
+	info := mgo.Collection(db.User).FindOneAndReplace(context.Background(), bson.M{"_id": oldId},
+		user)
+	if info.Err() != nil {
+		rsp.Msg = info.Err().Error()
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+	fmt.Println(info)
 	if err == nil {
-		fmt.Println(info.MatchedCount)
+		//fmt.Println(info.MatchedCount)
 	}
 	rsp.Msg = "success"
 	rsp.Code = 200
@@ -163,7 +207,6 @@ func Deluser(g *gin.Context) {
 	}
 	username := g.PostForm("username")
 	info, err := mgo.Collection(db.User).DeleteOne(context.Background(), bson.M{"username": username})
-
 	if info.DeletedCount == 0 {
 		rsp.Msg = "faild"
 		rsp.Data = "username is  not exist!!"
@@ -171,7 +214,6 @@ func Deluser(g *gin.Context) {
 		g.JSON(http.StatusOK, rsp)
 		return
 	}
-
 	if err == nil {
 		fmt.Println(info.DeletedCount)
 		rsp.Msg = "success"
@@ -186,5 +228,3 @@ func Deluser(g *gin.Context) {
 		return
 	}
 }
-
-/* */

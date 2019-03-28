@@ -1,3 +1,0 @@
-# go env
-export GOROOT=/opt/go
-export GOBIN=$GOROOT/bin

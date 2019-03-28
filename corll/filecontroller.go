@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
+	"path"
 )
 
 /* upload file */
@@ -44,4 +47,28 @@ func Uploadfile(g *gin.Context) {
 	} else {
 		fmt.Println("..err..", err)
 	}
+}
+
+/* download file  */
+func Downloadfile(g *gin.Context) {
+	g.Header("Content-Disposition", "attachment; filename="+url.QueryEscape(path.Base("upload/1.jpg")))
+	g.Header("Content-Description", "File Transfer")
+	g.Header("Content-Type", "application/octet-stream")
+	g.Header("Content-Transfer-Encoding", "binary")
+	g.Header("Expires", "0")
+	// 如果缓存过期了，会再次和原来的服务器确定是否为最新数据，而不是和中间的proxy
+	g.Header("Cache-Control", "must-revalidate")
+	g.Header("Pragma", "public")
+	g.Header("content-disposition", `attachment; filename=`+"upload/1.jpg")
+	g.File("upload/1.jpg")
+}
+
+/* read file  */
+func Readfile(g *gin.Context) {
+	b, err := ioutil.ReadFile("gopath.txt")
+	if err != nil {
+		fmt.Print(err)
+	}
+	str := string(b)
+	fmt.Println(str)
 }
