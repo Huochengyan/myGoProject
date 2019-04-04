@@ -7,16 +7,17 @@ import (
 	"net/http"
 )
 
+//获取所有用户
 func GetUserInfo(g *gin.Context) {
 	rsp := new(Rsp)
 	db := db.InitMysqlDb()
+
 	Rows, err := db.Query("select  * from  userinfo;")
 	fmt.Println(Rows, err)
 	var user = new(UserInfo)
 	var users []UserInfo
 	for Rows.Next() {
-		//Rows.Scan(&user.Id,&user.UserName)
-		Rows.Scan(user)
+		Rows.Scan(&user.Id, &user.UserName)
 		users = append(users, *user)
 	}
 	rsp.Code = 200
