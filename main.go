@@ -54,6 +54,12 @@ func main() {
 
 	}
 
+	v3 := router.Group("/userinfo")
+	{
+		v3.GET("/getuserinfo", corll.GetUserInfo)
+
+	}
+
 	err := router.Run(":8888") // listen and serve on 0.0.0.0:8080
 	if err != nil {
 		panic(err)

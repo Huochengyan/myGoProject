@@ -6,19 +6,20 @@ import (
 	"time"
 )
 
+const url = "mongodb://192.168.1.108:27017"
+const dbName = "mycol"
+
 /* mongodb */
 func InitMongoDB() (collection *mongo.Database) {
-	if Mgo == nil {
-		Mgo = connectDB()
+	if mgo == nil {
+		mgo = connectDB()
 	}
-	return Mgo
+	return mgo
 }
 
-var Mgo *mongo.Database
+var mgo *mongo.Database
 
 func connectDB() (collection *mongo.Database) {
-	const url = "mongodb://192.168.1.108:27017"
-	const dbName = "mycol"
 	client, err := mongo.NewClient(url)
 	if err != nil {
 		return nil
