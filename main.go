@@ -27,7 +27,9 @@ func main() {
 	//-----------------------------------------------------------
 	//渲染html页面
 	// 静态资源加载，本例为css,js以及资源图片
-	router.Static("views", "views")
+	router.Static("static", "static")
+
+	//router.Static("static/*")
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
@@ -40,6 +42,7 @@ func main() {
 		v1.POST("/insertuser", corll.Insertuser)
 		v1.POST("/queryalluser", corll.Queryalluser)
 		v1.GET("/getalluser", corll.Getalluser)
+		v1.GET("/QueryByUsername", corll.QueryByUsername)
 		v1.POST("/updateuser", corll.Updateuser)
 		v1.POST("/deluser", corll.Deluser)
 	}
@@ -48,6 +51,12 @@ func main() {
 		v2.POST("/uploadfile", corll.Uploadfile)
 		v2.GET("/downloadfile", corll.Downloadfile)
 		v2.GET("/readfile", corll.Readfile)
+
+	}
+
+	v3 := router.Group("/userinfo")
+	{
+		v3.GET("/getuserinfo", corll.GetUserInfo)
 
 	}
 

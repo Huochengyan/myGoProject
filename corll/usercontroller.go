@@ -13,13 +13,13 @@ import (
 	"strconv"
 )
 
-/*login*/
+/*login user*/
 func Login(g *gin.Context) {
 	fmt.Println("login.........")
 	rsp := new(Rsp)
 	name := g.PostForm("username")
 	pass := g.PostForm("password")
-	mgo, err := db.InitMongoDB()
+	mgo := db.InitMongoDB()
 	findfilter := bson.D{{"username", g.PostForm("username")}, {"password", g.PostForm("password")}}
 	cur, err := mgo.Collection(db.User).Find(context.Background(), findfilter)
 	for cur.Next(context.Background()) {
@@ -50,10 +50,7 @@ func Insertuser(g *gin.Context) {
 		rsp.Code = 201
 		g.JSON(http.StatusOK, rsp)
 	}
-	mgo, err := db.InitMongoDB()
-	if err != nil {
-		fmt.Println(nil)
-	}
+	mgo := db.InitMongoDB()
 	newuser := new(User)
 	newuser.Username = g.PostForm("username")
 	newuser.Password = g.PostForm("password")
@@ -76,10 +73,7 @@ func Insertuser(g *gin.Context) {
 func Queryalluser(g *gin.Context) {
 	fmt.Println("Queryalluser.........")
 	rsp := new(Rsp)
-	mgo, err := db.InitMongoDB()
-	if err != nil {
-		fmt.Println("connect db err:", err)
-	}
+	mgo := db.InitMongoDB()
 	var users []User
 	cur, err := mgo.Collection(db.User).Find(context.Background(), bson.D{}, nil)
 	if err == nil {
@@ -98,24 +92,42 @@ func Queryalluser(g *gin.Context) {
 	return
 }
 
+/*  模糊查询 query  by username */
+func QueryByUsername(g *gin.Context) {
+	rsp := new(Rsp)
+	fmt.Println(".....QueryByUsername..")
+	username := g.Query("username")
+	mgo := db.InitMongoDB()
+	fmt.Println(username)
+
+	filter := bson.M{"username": bson.M{"$regex": username, "$options": "$i"}}
+
+	cur, err := mgo.Collection(db.User).Find(context.Background(), filter)
+	if err != nil {
+		fmt.Println(err)
+	}
+	var users []User
+	for cur.Next(context.Background()) {
+		elme := new(User)
+		err := cur.Decode(elme)
+		if err == nil {
+			users = append(users, *elme)
+		}
+	}
+	rsp.Msg = "success"
+	rsp.Code = 200
+	rsp.Data = users
+	g.JSON(http.StatusOK, rsp)
+	return
+}
+
 /* get all user */
 func Getalluser(g *gin.Context) {
 	log.Println("Getalluser.........")
 	rsp := new(Rsp)
-	mgo, err := db.InitMongoDB()
-	if err != nil {
-		fmt.Println("connect db err:", err)
-	}
+	mgo := db.InitMongoDB()
 	filter := bson.M{}
-
-	int, err := strconv.Atoi(g.PostForm("gender"))
-	if err == nil {
-		filter = bson.M{"gender": int}
-	}
-	username := g.PostForm("username")
-	if username != "" {
-		filter = bson.M{"username": username}
-	}
+	limit, err := strconv.Atoi(g.Query("limit"))
 
 	//排序 正序1 倒序-1  ----------------------------
 	opts := new(options.FindOptions)
@@ -125,7 +137,7 @@ func Getalluser(g *gin.Context) {
 	//排序 正序1 倒序-1  ----------------------------
 
 	var users []User
-	cur, err := mgo.Collection(db.User).Find(context.Background(), filter, opts)
+	cur, err := mgo.Collection(db.User).Find(context.Background(), filter, opts.SetLimit(int64(limit)))
 	if err == nil {
 		for cur.Next(context.Background()) {
 			elme := new(User)
@@ -147,10 +159,7 @@ func Getalluser(g *gin.Context) {
 func Updateuser(g *gin.Context) {
 	fmt.Println("update user.................")
 	rsp := new(Rsp)
-	mgo, err := db.InitMongoDB()
-	if err != nil {
-		fmt.Println(err)
-	}
+	mgo := db.InitMongoDB()
 	id := g.PostForm("id")
 	oldId, err := primitive.ObjectIDFromHex(id)
 	newpassword := g.PostForm("password")
@@ -201,10 +210,7 @@ func Updateuser(g *gin.Context) {
 func Deluser(g *gin.Context) {
 	fmt.Println("update user.................")
 	rsp := new(Rsp)
-	mgo, err := db.InitMongoDB()
-	if err != nil {
-		fmt.Println(err)
-	}
+	mgo := db.InitMongoDB()
 	username := g.PostForm("username")
 	info, err := mgo.Collection(db.User).DeleteOne(context.Background(), bson.M{"username": username})
 	if info.DeletedCount == 0 {

@@ -99,9 +99,9 @@ func main() {
 	chainidFilter := bson.M{"by": 5}
 
 	//静态文件处理
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("views/"))))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
 	//html文件处理  http://localhost:9090   index.html
-	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("views/"))))
+	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("static/"))))
 
 	// [test] table name
     cur,err :=mgdb.Collection(tname).Find(context.Background(),chainidFilter)
