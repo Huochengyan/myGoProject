@@ -57,7 +57,7 @@ func main() {
 	v3 := router.Group("/userinfo")
 	{
 		v3.GET("/getuserinfo", corll.GetUserInfo)
-
+		v3.POST("/updateuser", corll.UpdateUser)
 	}
 
 	err := router.Run(":8888") // listen and serve on 0.0.0.0:8080

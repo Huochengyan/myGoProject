@@ -25,6 +25,13 @@ func GetUserInfo(g *gin.Context) {
 	g.JSON(http.StatusOK, rsp)
 }
 
+func UpdateUser(g *gin.Context) {
+	rsp := new(Rsp)
+	rsp.Code = 200
+	rsp.Data = nil
+	g.JSON(http.StatusOK, rsp)
+}
+
 type UserInfo struct {
 	Id       int    `json:"id"`
 	UserName string `json:"username"`
