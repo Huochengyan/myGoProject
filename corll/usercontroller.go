@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/gogf/gf/g/util/gvalid"
+	_ "github.com/gogf/gf/g/util/gvalid"
 	"github.com/mongodb/mongo-go-driver/bson"
 	"github.com/mongodb/mongo-go-driver/bson/primitive"
 	"github.com/mongodb/mongo-go-driver/mongo/options"
@@ -44,14 +46,40 @@ func Login(g *gin.Context) {
 /* insert user table */
 func Insertuser(g *gin.Context) {
 	rsp := new(Rsp)
-	fmt.Println("InsertUser.........")
-	if g.PostForm("username") == "" || g.PostForm("password") == "" {
-		rsp.Msg = "user is null"
+	newuser := new(User)
+	var err1 *gvalid.Error
+	err1 = gvalid.Check(g.PostForm("gender"), "required|integer|between:0,150", "gender")
+	if err1 != nil {
+		rsp.Msg = err1.String()
 		rsp.Code = 201
 		g.JSON(http.StatusOK, rsp)
+		return
 	}
+	err1 = gvalid.Check(g.PostForm("username"), "required", nil)
+	if err1 != nil {
+		rsp.Msg = "username:" + err1.String()
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+	err1 = gvalid.Check(g.PostForm("password"), "required", nil)
+	if err1 != nil {
+		rsp.Msg = "password:" + err1.String()
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+	err1 = gvalid.Check(g.PostForm("email"), "required|email", nil)
+	if err1 != nil {
+		rsp.Msg = "email:" + err1.String()
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+
 	mgo := db.InitMongoDB()
-	newuser := new(User)
+	newuser.Id = primitive.NewObjectID()
+	newuser.Email = g.PostForm("email")
 	newuser.Username = g.PostForm("username")
 	newuser.Password = g.PostForm("password")
 	insertID, err := mgo.Collection(db.User).InsertOne(context.Background(), newuser)

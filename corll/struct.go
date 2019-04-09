@@ -1,8 +1,6 @@
 package corll
 
-import (
-	"github.com/mongodb/mongo-go-driver/bson/primitive"
-)
+import "github.com/mongodb/mongo-go-driver/bson/primitive"
 
 type Rsp struct {
 	Code int         `json:"code"`
@@ -17,4 +15,5 @@ type User struct {
 	Password string             `json:"password"`
 	Address  string             `json:"address"`
 	Gender   int                `json:"gender"`
+	Email    string             `json:"email"`
 }
