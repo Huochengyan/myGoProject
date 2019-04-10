@@ -40,14 +40,21 @@
             <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
-    <table class="layui-table" lay-data="{url:'http://127.0.0.1:8888/user/getalluser',page:true,toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
+    <table class="layui-table" lay-data="{url:'http://127.0.0.1:8888/user/getalluser',page: {
+                layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+                ,limits:[5,10,15]
+                ,first: true
+                ,last: true
+                ,count:12
+            },toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
         <thead>
         <tr>
             <th lay-data="{field:'username', width:120, edit: 'text'}">用户名</th>
             <th lay-data="{field:'gender', width:120, edit:  'text'}">性别</th>
             <th lay-data="{field:'password', width:120, edit: 'text'}">密码</th>
             <th lay-data="{field:'address', edit: 'text'}">地址</th>
-
+            <th lay-data="{field:'email', edit: 'text'}">邮箱</th>
+            <th lay-data="{field:'phone', edit: 'text'}">手机</th>
         </tr>
         </thead>
     </table>
@@ -85,8 +92,28 @@
     });
 </script>
 <script>
+
+
     layui.use('table', function(){
         var table = layui.table;
+        // var laypage = layui.laypage;
+        // //执行一个laypage实例
+        // laypage.render({
+        //     elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
+        //     ,count: 50 //数据总数，从服务端得到
+        // });
+
+
+        table.render({
+            page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']//自定义分页布局
+                ,limits:[5,10,15]
+                ,first: true //不显示首页
+                ,last: true //不显示尾页
+            }
+        })
+
+
 
         //监听单元格编辑
         table.on('edit(test)', function(obj){
