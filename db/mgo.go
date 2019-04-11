@@ -37,6 +37,5 @@ func connectDB() (collection *mongo.Database) {
 /* mongodb table Name */
 const (
 	User string = "user"
-	//BlockTxs string = "blockTxs"
-	//BlockData string = "blockData"
+	Role string = "role"
 )

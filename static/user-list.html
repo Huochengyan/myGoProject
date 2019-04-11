@@ -127,9 +127,13 @@
             var xhr = new XMLHttpRequest();
             xhr.open('POST', location.origin+'/user/updateuser');
             xhr.onload = function(){
-                if(xhr.status >= 200 && xhr.status < 300 || xhr.status == 304) {
+                if(JSON.parse(xhr.responseText).code==200){
                     console.log(xhr.responseText);
                     layer.msg('[ID: '+ data.Id +'] ' + field + ' 字段更改为：'+ value);
+                }else
+                {
+                    console.log(xhr.responseText);
+                    layer.msg(xhr.responseText);
                 }
             };
             xhr.send(formData);

@@ -18,3 +18,9 @@ type User struct {
 	Email    string             `json:"email"`
 	Phone    string             `json:"phone"`
 }
+
+/* role */
+type Role struct {
+	Id       primitive.ObjectID `bson:"_id"`
+	Rolename string             `json:"rolename"`
+}
