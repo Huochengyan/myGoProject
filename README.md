@@ -6,3 +6,4 @@
 ## mongodb version 3.4.20
 
 ## view html version  开源html 使用layui 
+## 使用jwt 进行token验证
