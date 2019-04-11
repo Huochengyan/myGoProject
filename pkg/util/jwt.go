@@ -7,6 +7,7 @@ import (
 	//"gin-blog/pkg/setting"
 )
 
+/*  jwttest  就是一个服务器生成的字符串 能够标明是服务器签发Token */
 var jwtSecret = []byte("jwttest")
 
 type Claims struct {

@@ -19,13 +19,13 @@ func GetMsg(code int) string {
 		result = "成功"
 		break
 	case 2001:
-		result = "无效参数"
+		result = " 缺少 token "
 		break
 	case 2002:
-		result = "验证失败"
+		result = "token 验证失败"
 		break
 	case 2003:
-		result = "超时！！"
+		result = "token 超时！！"
 		break
 	case 2004:
 		result = "错误的TOKEN"

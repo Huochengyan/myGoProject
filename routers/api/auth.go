@@ -11,6 +11,9 @@ import (
 	"net/http"
 )
 
+/*
+ 获得一个Token
+*/
 func GetAuth(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")

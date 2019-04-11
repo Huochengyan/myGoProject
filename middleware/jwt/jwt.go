@@ -1,15 +1,16 @@
 package jwt
 
 import (
-	"net/http"
-	"time"
-
 	"github.com/gin-gonic/gin"
-
 	"myProject/pkg/e"
 	"myProject/pkg/util"
+	"net/http"
+	"time"
 )
 
+/**
+  每一个请求前验证Token
+*/
 func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var code int
