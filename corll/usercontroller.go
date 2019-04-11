@@ -327,3 +327,19 @@ func Deluser(g *gin.Context) {
 		return
 	}
 }
+
+func GetUserByNameAndPassword(username string, password string) bool {
+	mgo := db.InitMongoDB()
+	findfilter := bson.D{{"username", username}, {"password", password}}
+	cur, err := mgo.Collection(db.User).Find(context.Background(), findfilter)
+	if err == nil {
+		for cur.Next(context.Background()) {
+			elme := new(User)
+			err := cur.Decode(elme)
+			if err == nil {
+				return true
+			}
+		}
+	}
+	return false
+}

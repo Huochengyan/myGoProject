@@ -5,6 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"io"
 	"myProject/corll"
+	"myProject/middleware/jwt"
+	"myProject/routers/api"
 	"os"
 )
 
@@ -31,17 +33,27 @@ func InitRouter() (router *gin.Engine) {
 			"message": "pong",
 		})
 	})
+	router.GET("/auth", api.GetAuth)
+	//apiv1 := router.Group("/api/v1")
+	//apiv1.Use(jwt.JWT())
+	//{
+	//
+	//}
+
 	//use mongo db
 	v1 := router.Group("/user/")
 	{
-		v1.POST("/login", corll.Login)
-		v1.POST("/insertuser", corll.Insertuser)
-		v1.POST("/queryalluser", corll.Queryalluser)
-		v1.GET("/getalluser", corll.Getalluser)
-		v1.GET("/QueryByUsername", corll.QueryByUsername)
-		v1.POST("/updateuser", corll.Updateuser)
-		v1.POST("/deluser", corll.Deluser)
-		v1.GET("/getroles", corll.GetRoles)
+		v1.Use(jwt.JWT())
+		{
+			v1.POST("/login", corll.Login)
+			v1.POST("/insertuser", corll.Insertuser)
+			v1.POST("/queryalluser", corll.Queryalluser)
+			v1.GET("/getalluser", corll.Getalluser)
+			v1.GET("/QueryByUsername", corll.QueryByUsername)
+			v1.POST("/updateuser", corll.Updateuser)
+			v1.POST("/deluser", corll.Deluser)
+			v1.GET("/getroles", corll.GetRoles)
+		}
 	}
 	v2 := router.Group("/file")
 	{
