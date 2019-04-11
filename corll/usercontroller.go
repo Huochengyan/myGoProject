@@ -21,6 +21,25 @@ func Login(g *gin.Context) {
 	rsp := new(Rsp)
 	name := g.PostForm("username")
 	pass := g.PostForm("password")
+
+	var gerr *gvalid.Error
+	gerr = gvalid.Check(g.PostForm("username"), "required", nil)
+	if gerr != nil {
+		rsp.Msg = "faild"
+		rsp.Code = 201
+		rsp.Data = gerr.Maps()
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+	gerr = gvalid.Check(g.PostForm("password"), "required", nil)
+	if gerr != nil {
+		rsp.Msg = "faild"
+		rsp.Code = 201
+		rsp.Data = gerr.Maps()
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+
 	mgo := db.InitMongoDB()
 	findfilter := bson.D{{"username", g.PostForm("username")}, {"password", g.PostForm("password")}}
 	cur, err := mgo.Collection(db.User).Find(context.Background(), findfilter)
@@ -31,6 +50,7 @@ func Login(g *gin.Context) {
 			if elme.Username == name && elme.Password == pass {
 				rsp.Msg = "success"
 				rsp.Code = 200
+				rsp.Data = elme
 				g.JSON(http.StatusOK, rsp)
 				return
 			}
@@ -49,49 +69,54 @@ func Insertuser(g *gin.Context) {
 	newuser := new(User)
 	var err1 *gvalid.Error
 	//1. 单参数校验
-	//err1 = gvalid.Check(g.PostForm("gender"), "required|integer|between:0,150", nil)
-	//if err1 != nil {
-	//	rsp.Msg = err1.String()
-	//	rsp.Code = 201
-	//	g.JSON(http.StatusOK, rsp)
-	//	return
-	//}
-	//err1 = gvalid.Check(g.PostForm("username"), "required", nil)
-	//if err1 != nil {
-	//	rsp.Msg = "username:" + err1.String()
-	//	rsp.Code = 201
-	//	g.JSON(http.StatusOK, rsp)
-	//	return
-	//}
-	//err1 = gvalid.Check(g.PostForm("password"), "required|password", nil)
-	//if err1 != nil {
-	//	rsp.Msg = "password:" + err1.String()
-	//	rsp.Code = 201
-	//	g.JSON(http.StatusOK, rsp)
-	//	return
-	//}
-	//err1 = gvalid.Check(g.PostForm("email"), "required|email", nil)
-	//if err1 != nil {
-	//	rsp.Msg = "email:" + err1.String()
-	//	rsp.Code = 201
-	//	g.JSON(http.StatusOK, rsp)
-	//	return
-	//}
-	//err1 = gvalid.Check(g.PostForm("phone"), "required|phone", "phone")
-	//if err1 != nil {
-	//	rsp.Msg =err1.String()
-	//	rsp.Code = 201
-	//	rsp.Data=err1.Maps()
-	//	g.JSON(http.StatusOK, rsp)
-	//	return
-	//}
+	err1 = gvalid.Check(g.PostForm("gender"), "required|integer|between:0,150", nil)
+	if err1 != nil {
+		rsp.Msg = err1.String()
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+	err1 = gvalid.Check(g.PostForm("username"), "required", nil)
+	if err1 != nil {
+		rsp.Msg = "username:" + err1.String()
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+	err1 = gvalid.Check(g.PostForm("password"), "required|password", nil)
+	if err1 != nil {
+		rsp.Msg = "password:" + err1.String()
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+	err1 = gvalid.Check(g.PostForm("email"), "required|email", nil)
+	if err1 != nil {
+		rsp.Msg = "email:" + err1.String()
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+	err1 = gvalid.Check(g.PostForm("phone"), "required|phone", "phone")
+	if err1 != nil {
+		rsp.Msg = err1.String()
+		rsp.Code = 201
+		rsp.Data = err1.Maps()
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
 
 	mgo := db.InitMongoDB()
 	newuser.Id = primitive.NewObjectID()
+	gender, err := strconv.Atoi(g.PostForm("gender"))
+	if err == nil {
+		newuser.Gender = gender
+	}
 	newuser.Email = g.PostForm("email")
 	newuser.Username = g.PostForm("username")
 	newuser.Password = g.PostForm("password")
 	newuser.Phone = g.PostForm("phone")
+	newuser.Address = g.PostForm("address")
 
 	//2. 采用CheckStruct 方式校验
 	rules := map[string]string{
@@ -99,6 +124,7 @@ func Insertuser(g *gin.Context) {
 		"Email": "email",
 	}
 	err1 = gvalid.CheckStruct(newuser, rules, nil)
+
 	if err1 != nil {
 		rsp.Msg = err1.String()
 		rsp.Code = 201
@@ -215,6 +241,16 @@ func Updateuser(g *gin.Context) {
 	fmt.Println("update user.................")
 	rsp := new(Rsp)
 	mgo := db.InitMongoDB()
+
+	var err1 *gvalid.Error
+	//1. 单参数校验
+	err1 = gvalid.Check(g.PostForm("gender"), "integer|between:0,2", nil)
+	if err1 != nil {
+		rsp.Msg = err1.String()
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
 
 	id := g.PostForm("id")
 

@@ -13,10 +13,10 @@ func InitRouter() (router *gin.Engine) {
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
 	router.Use(cors.New(config))
+
 	//log -------------------------------------------
 	// Disable Console Color, you don't need console color when writing the logs to file.
 	gin.DisableConsoleColor()
-
 	// Logging to a file.
 	f, _ := os.Create("gin.log")
 	gin.DefaultWriter = io.MultiWriter(f)
@@ -31,7 +31,7 @@ func InitRouter() (router *gin.Engine) {
 			"message": "pong",
 		})
 	})
-
+	//use mongo db
 	v1 := router.Group("/user/")
 	{
 		v1.POST("/login", corll.Login)
@@ -41,6 +41,7 @@ func InitRouter() (router *gin.Engine) {
 		v1.GET("/QueryByUsername", corll.QueryByUsername)
 		v1.POST("/updateuser", corll.Updateuser)
 		v1.POST("/deluser", corll.Deluser)
+		v1.GET("/getroles", corll.GetRoles)
 	}
 	v2 := router.Group("/file")
 	{
