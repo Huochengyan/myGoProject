@@ -5,6 +5,7 @@ import (
 	"myProject/pkg/e"
 	"myProject/pkg/util"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -26,6 +27,14 @@ func JWT() gin.HandlerFunc {
 				code = e.ERROR_AUTH_CHECK_TOKEN_FAIL
 			} else if time.Now().Unix() > claims.ExpiresAt {
 				code = e.ERROR_AUTH_CHECK_TOKEN_TIMEOUT
+			}
+			//上边的超时条
+			if err != nil {
+				var timeout int
+				timeout = strings.Index(err.Error(), "token is expired")
+				if timeout != -1 {
+					code = e.ERROR_AUTH_CHECK_TOKEN_TIMEOUT
+				}
 			}
 		}
 
