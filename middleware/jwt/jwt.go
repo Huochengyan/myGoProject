@@ -28,7 +28,7 @@ func JWT() gin.HandlerFunc {
 			} else if time.Now().Unix() > claims.ExpiresAt {
 				code = e.ERROR_AUTH_CHECK_TOKEN_TIMEOUT
 			}
-			//上边的超时条
+			//上边的超时条件
 			if err != nil {
 				var timeout int
 				timeout = strings.Index(err.Error(), "token is expired")
