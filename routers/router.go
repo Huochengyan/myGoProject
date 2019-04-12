@@ -43,9 +43,9 @@ func InitRouter() (router *gin.Engine) {
 	//use mongo db
 	v1 := router.Group("/user/")
 	{
+		v1.POST("/login", corll.Login)
 		v1.Use(jwt.JWT())
 		{
-			v1.POST("/login", corll.Login)
 			v1.POST("/insertuser", corll.Insertuser)
 			v1.POST("/queryalluser", corll.Queryalluser)
 			v1.GET("/getalluser", corll.Getalluser)
