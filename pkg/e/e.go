@@ -31,7 +31,7 @@ func GetMsg(code int) string {
 		result = "错误的TOKEN"
 		break
 	case 2005:
-		result = "错误的TOKEN"
+		result = "不存在的用户来获取Token"
 		break
 	}
 	return result

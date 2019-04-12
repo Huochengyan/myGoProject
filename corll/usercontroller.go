@@ -328,6 +328,7 @@ func Deluser(g *gin.Context) {
 	}
 }
 
+/* check user is exist ? */
 func GetUserByNameAndPassword(username string, password string) bool {
 	mgo := db.InitMongoDB()
 	findfilter := bson.D{{"username", username}, {"password", password}}
