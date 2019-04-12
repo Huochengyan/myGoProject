@@ -6,6 +6,9 @@
 ## 2. mongodb version 3.4.20
 
 ## 3. 前端 view html version  开源html 使用layui 
+
+![Image text](views/img/1.png)
+
 ## 4. 使用jwt 进行token验证 鉴权
 
 
