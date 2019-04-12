@@ -33,12 +33,9 @@ func InitRouter() (router *gin.Engine) {
 			"message": "pong",
 		})
 	})
+
+	/* 获得授权Token */
 	router.GET("/auth", api.GetAuth)
-	//apiv1 := router.Group("/api/v1")
-	//apiv1.Use(jwt.JWT())
-	//{
-	//
-	//}
 
 	//use mongo db
 	v1 := router.Group("/user/")
@@ -60,7 +57,6 @@ func InitRouter() (router *gin.Engine) {
 		v2.POST("/uploadfile", corll.Uploadfile)
 		v2.GET("/downloadfile", corll.Downloadfile)
 		v2.GET("/readfile", corll.Readfile)
-
 	}
 
 	//use mysql db
