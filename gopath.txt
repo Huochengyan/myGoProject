@@ -3,7 +3,7 @@ export GOROOT=/opt/go
 export GOBIN=$GOROOT/bin
 
 
-
+export PATH=/opt/go/bin
 不错的文章：
 
 http://www.cnblogs.com/wdliu/p/9272220.html
