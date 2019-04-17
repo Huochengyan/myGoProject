@@ -24,3 +24,8 @@ type Role struct {
 	Id       primitive.ObjectID `bson:"_id"`
 	Rolename string             `json:"rolename"`
 }
+
+type LoginInfo struct {
+	User  *User
+	Token string
+}

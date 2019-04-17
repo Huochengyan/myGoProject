@@ -11,6 +11,7 @@ import (
 	"github.com/mongodb/mongo-go-driver/mongo/options"
 	"log"
 	"myProject/db"
+	"myProject/pkg/util"
 	"net/http"
 	"strconv"
 )
@@ -48,9 +49,15 @@ func Login(g *gin.Context) {
 		err := cur.Decode(elme)
 		if err == nil {
 			if elme.Username == name && elme.Password == pass {
+				var info = new(LoginInfo)
+				info.User = elme
+				token, err := util.GenerateToken(g.PostForm("username"), g.PostForm("password"))
+				if err == nil {
+					info.Token = token
+				}
 				rsp.Msg = "success"
 				rsp.Code = 200
-				rsp.Data = elme
+				rsp.Data = info
 				g.JSON(http.StatusOK, rsp)
 				return
 			}

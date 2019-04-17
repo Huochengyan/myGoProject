@@ -3,7 +3,7 @@ package db
 import (
 	"context"
 	"github.com/mongodb/mongo-go-driver/mongo"
-	"myProject/utils"
+	"myProject/myProjectUtils"
 	"time"
 )
 
@@ -20,7 +20,7 @@ func InitMongoDB() (collection *mongo.Database) {
 var mgo *mongo.Database
 
 func connectDB() (collection *mongo.Database) {
-	var url = utils.GetConf("mongo", "url")
+	var url = myProjectUtils.GetConf("mongo", "url")
 	client, err := mongo.NewClient(url)
 	if err != nil {
 		return nil
@@ -31,7 +31,7 @@ func connectDB() (collection *mongo.Database) {
 	if err != nil {
 		return nil
 	}
-	var dbName = utils.GetConf("mongo", "db")
+	var dbName = myProjectUtils.GetConf("mongo", "db")
 	collection = client.Database(dbName)
 	return collection
 }

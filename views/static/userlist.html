@@ -54,26 +54,6 @@
 
 <script>
 
-    var token="";
-    $(function () {
-        var formData=new FormData();
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', location.origin+'/auth?username='+localStorage.getItem("username")+'&password='+localStorage.getItem("password"));
-        xhr.onload = function(){
-            if(JSON.parse(xhr.responseText).code==200){
-                console.log(xhr.responseText);
-                token=JSON.parse(xhr.responseText).data.token;
-                localStorage.setItem("token",token)
-            }else
-            {
-                //alert(JSON.parse(xhr.responseText).data.msg)
-                return ""
-            }
-        };
-        xhr.send(formData);
-        return token
-    })
-
     layui.use('table', function() {
         var table = layui.table;
         var laypage = layui.laypage;

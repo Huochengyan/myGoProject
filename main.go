@@ -2,12 +2,7 @@ package main
 
 import (
 	"fmt"
-	//"github.com/gin-contrib/cors"
-	//"github.com/gin-gonic/gin"
-	//"io"
-	//"myProject/corll"
 	"myProject/routers"
-	//"os"
 	"os/exec"
 	"runtime"
 )

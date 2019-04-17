@@ -1,6 +1,9 @@
-package utils
+package myProjectUtils
 
 import "github.com/go-ini/ini"
+
+type MyPorjectConf struct {
+}
 
 /* 获取配置conf文件的参数信息 */
 func GetConf(name string, key string) string {
