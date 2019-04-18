@@ -19,6 +19,20 @@ func JWT() gin.HandlerFunc {
 
 		code = e.SUCCESS
 		token := c.Query("token")
+
+		//获取header的token-===========================
+
+		authString := c.Request.Header.Get("Authorization")
+		kv := strings.Split(authString, " ")
+		if len(kv) != 2 || kv[0] != "Bearer" {
+			code = e.ERROR_AUTH_CHECK_TOKEN_FAIL
+			return
+		} else {
+			token = kv[1]
+		}
+
+		//================================================
+
 		if token == "" {
 			code = e.INVALID_PARAMS
 		} else {
