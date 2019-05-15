@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/globalsign/mgo/bson"
+	"github.com/mongodb/mongo-go-driver/mongo"
 	"github.com/mongodb/mongo-go-driver/mongo/options"
 	"log/log"
 	"myProject/db"
@@ -13,7 +14,12 @@ import (
 	"time"
 )
 
-func TestInsert(g *gin.Context) {
+type TestC struct {
+	Mgo *mongo.Database
+	//RedisCli *redis.Client
+}
+
+func (t TestC) TestInsert(g *gin.Context) {
 	rsp := new(Rsp)
 
 	var tests []interface{}
@@ -45,7 +51,7 @@ func TestInsert(g *gin.Context) {
 		return
 	}
 }
-func Test2(g *gin.Context) {
+func (t TestC) Test2(g *gin.Context) {
 	var Tests = make([]Test, 0)
 	rsp := new(Rsp)
 	mgo := db.InitMongoDB()
@@ -82,5 +88,13 @@ func Test2(g *gin.Context) {
 	rsp.Msg = "success"
 	g.JSON(http.StatusOK, rsp)
 
+	return
+}
+
+func (t TestC) GetTestInfo(g *gin.Context) {
+	rsp := new(Rsp)
+	rsp.Msg = "faild"
+	rsp.Code = 201
+	g.JSON(http.StatusOK, rsp)
 	return
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"io"
 	"myProject/corll"
+	"myProject/db"
 	"myProject/middleware/jwt"
 	"myProject/routers/api"
 	"os"
@@ -66,10 +67,11 @@ func InitRouter() (router *gin.Engine) {
 		v3.POST("/updateuser", corll.UpdateUser)
 	}
 
+	t := corll.TestC{Mgo: db.InitMongoDB()}
 	test := router.Group("/test/")
 	{
-		test.GET("/test1", corll.TestInsert)
-		test.GET("/test2", corll.Test2)
+		test.GET("/test1", t.TestInsert)
+		test.GET("/test2", t.Test2)
 	}
 	return
 }
