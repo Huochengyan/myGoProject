@@ -65,5 +65,11 @@ func InitRouter() (router *gin.Engine) {
 		v3.GET("/getuserinfo", corll.GetUserInfo)
 		v3.POST("/updateuser", corll.UpdateUser)
 	}
+
+	test := router.Group("/test/")
+	{
+		test.GET("/test1", corll.TestInsert)
+		test.GET("/test2", corll.Test2)
+	}
 	return
 }
