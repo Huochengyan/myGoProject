@@ -3,7 +3,7 @@ package corll
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	"github.com/mongodb/mongo-go-driver/bson"
+	"go.mongodb.org/mongo-driver/bson"
 	"myProject/db"
 	"net/http"
 )

@@ -2,7 +2,8 @@ package db
 
 import (
 	"context"
-	"github.com/mongodb/mongo-go-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"myProject/myProjectUtils"
 	"time"
 )
@@ -21,7 +22,9 @@ var mgo *mongo.Database
 
 func connectDB() (collection *mongo.Database) {
 	var url = myProjectUtils.GetConf("mongo", "url")
-	client, err := mongo.NewClient(url)
+	opts := options.ClientOptions{Hosts: []string{url}}
+
+	client, err := mongo.NewClient(&opts)
 	if err != nil {
 		return nil
 	}

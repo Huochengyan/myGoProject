@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/globalsign/mgo/bson"
-	"github.com/mongodb/mongo-go-driver/mongo"
-	"github.com/mongodb/mongo-go-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"log/log"
 	"myProject/db"
 	"net/http"
@@ -52,6 +52,10 @@ func (t TestC) TestInsert(g *gin.Context) {
 	}
 }
 func (t TestC) Test2(g *gin.Context) {
+
+	var par = g.Query("abc")
+	fmt.Println(par)
+
 	var Tests = make([]Test, 0)
 	rsp := new(Rsp)
 	mgo := db.InitMongoDB()

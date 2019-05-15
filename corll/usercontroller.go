@@ -6,9 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/g/util/gvalid"
 	_ "github.com/gogf/gf/g/util/gvalid"
-	"github.com/mongodb/mongo-go-driver/bson"
-	"github.com/mongodb/mongo-go-driver/bson/primitive"
-	"github.com/mongodb/mongo-go-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"myProject/db"
 	"myProject/pkg/util"
@@ -44,6 +44,13 @@ func Login(g *gin.Context) {
 	mgo := db.InitMongoDB()
 	findfilter := bson.D{{"username", g.PostForm("username")}, {"password", g.PostForm("password")}}
 	cur, err := mgo.Collection(db.User).Find(context.Background(), findfilter)
+	if err != nil {
+		rsp.Msg = "faild"
+		rsp.Code = 201
+		rsp.Data = gerr.Maps()
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
 	for cur.Next(context.Background()) {
 		elme := new(User)
 		err := cur.Decode(elme)
@@ -213,7 +220,8 @@ func Getalluser(g *gin.Context) {
 	rsp := new(Rsp)
 	mgo := db.InitMongoDB()
 	filter := bson.M{}
-	limit, err := strconv.Atoi(g.Query("limit"))
+
+	//limit, err := strconv.Atoi(g.Query("limit"))
 	page, err := strconv.Atoi(g.Query("page"))
 	fmt.Println(page)
 
@@ -222,10 +230,11 @@ func Getalluser(g *gin.Context) {
 	sortMap := make(map[string]interface{})
 	sortMap["gender"] = -1
 	opts.Sort = sortMap
+	//opts.Limit=int64(limit)
 	//排序 正序1 倒序-1  ----------------------------
 
 	var users []User
-	cur, err := mgo.Collection(db.User).Find(context.Background(), filter, opts.SetLimit(int64(limit)))
+	cur, err := mgo.Collection(db.User).Find(context.Background(), filter, opts)
 	if err == nil {
 		for cur.Next(context.Background()) {
 			elme := new(User)
