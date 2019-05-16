@@ -11,7 +11,14 @@ import (
 const dbName = "mycol"
 
 /* mongodb */
-func InitMongoDB() (collection *mongo.Database) {
+//func InitMongoDB() (collection *mongo.Database) {
+//	if mgo == nil {
+//		mgo = connectDB()
+//	}
+//	return mgo
+//}
+/* mongodb */
+func InitMongoDB2() (collection *mongo.Database) {
 	if mgo == nil {
 		mgo = connectDB()
 	}
@@ -26,6 +33,7 @@ func connectDB() (collection *mongo.Database) {
 
 	client, err := mongo.NewClient(&opts)
 	if err != nil {
+		panic(err)
 		return nil
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)

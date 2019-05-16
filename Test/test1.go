@@ -2,20 +2,34 @@ package main
 
 import (
 	"fmt"
-	"io"
-	"net/http"
-	"os"
+	"time"
 )
 
-func main() {
-	var url = "https://h5.pipix.com/s/6mtP8N"
+func consumer(cname string, ch chan int) {
 
-	resp, err := http.Get(url)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
-		os.Exit(1)
+	//可以循环 for i := range ch 来不断从 channel 接收值，直到它被关闭。
+
+	for i := range ch {
+		fmt.Println("consumer-----------", cname, ":", i)
 	}
-	io.Copy(os.Stdout, resp.Body)
-	resp.Body.Close()
+	fmt.Println("ch closed.")
+}
 
+func producer(pname string, ch chan int) {
+	for i := 0; i < 4; i++ {
+		fmt.Println("producer--", pname, ":", i)
+		ch <- i
+	}
+}
+
+func main() {
+	//用channel来传递"产品", 不再需要自己去加锁维护一个全局的阻塞队列
+	ch := make(chan int)
+	go producer("生产者1", ch)
+	go producer("生产者2", ch)
+	go consumer("消费者1", ch)
+	go consumer("消费者2", ch)
+	time.Sleep(10 * time.Second)
+	close(ch)
+	time.Sleep(10 * time.Second)
 }

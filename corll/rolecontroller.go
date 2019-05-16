@@ -4,16 +4,21 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"myProject/db"
 	"net/http"
 )
 
+type RoleC struct {
+	Mgo *mongo.Database
+	//RedisCli *redis.Client
+}
+
 /*   获得角色  */
-func GetRoles(g *gin.Context) {
-	mgo := db.InitMongoDB()
+func (m RoleC) GetRoles(g *gin.Context) {
 	rsp := new(Rsp)
 	var roles []Role
-	cur, err := mgo.Collection(db.Role).Find(context.Background(), bson.D{}, nil)
+	cur, err := m.Mgo.Collection(db.Role).Find(context.Background(), bson.D{}, nil)
 	if err == nil {
 		for cur.Next(context.Background()) {
 			elme := new(Role)

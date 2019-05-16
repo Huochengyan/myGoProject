@@ -36,8 +36,7 @@ func (t TestC) TestInsert(g *gin.Context) {
 		tests = append(tests, newuser)
 	}
 
-	mgo := db.InitMongoDB()
-	insertID, err := mgo.Collection(db.Test).InsertMany(context.Background(), tests, nil)
+	insertID, err := t.Mgo.Collection(db.Test).InsertMany(context.Background(), tests, nil)
 	fmt.Println(insertID)
 	if err == nil {
 		rsp.Msg = "success"
@@ -58,7 +57,6 @@ func (t TestC) Test2(g *gin.Context) {
 
 	var Tests = make([]Test, 0)
 	rsp := new(Rsp)
-	mgo := db.InitMongoDB()
 
 	opts := new(options.FindOptions)
 	limit := int64(6)
@@ -71,7 +69,7 @@ func (t TestC) Test2(g *gin.Context) {
 	opts.Sort = sortMap
 
 	filter := bson.D{{"email", "1111"}}
-	Txs, err := mgo.Collection(db.Test).Find(context.Background(), filter)
+	Txs, err := t.Mgo.Collection(db.Test).Find(context.Background(), filter)
 	if err != nil {
 		rsp.Code = 500
 		rsp.Msg = "get data error"

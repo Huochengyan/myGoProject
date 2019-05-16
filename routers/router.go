@@ -38,19 +38,21 @@ func InitRouter() (router *gin.Engine) {
 	/* 获得授权Token */
 	router.GET("/auth", api.GetAuth)
 
+	t1 := corll.UserC{Mgo: db.InitMongoDB2()}
+	r1 := corll.RoleC{Mgo: db.InitMongoDB2()}
 	//use mongo db
 	v1 := router.Group("/user/")
 	{
-		v1.POST("/login", corll.Login)
+		v1.POST("/login", t1.Login)
 		v1.Use(jwt.JWT())
 		{
-			v1.POST("/insertuser", corll.Insertuser)
-			v1.POST("/queryalluser", corll.Queryalluser)
-			v1.GET("/getalluser", corll.Getalluser)
-			v1.GET("/QueryByUsername", corll.QueryByUsername)
-			v1.POST("/updateuser", corll.Updateuser)
-			v1.POST("/deluser", corll.Deluser)
-			v1.GET("/getroles", corll.GetRoles)
+			v1.POST("/insertuser", t1.Insertuser)
+			v1.POST("/queryalluser", t1.Queryalluser)
+			v1.GET("/getalluser", t1.Getalluser)
+			v1.GET("/QueryByUsername", t1.QueryByUsername)
+			v1.POST("/updateuser", t1.Updateuser)
+			v1.POST("/deluser", t1.Deluser)
+			v1.GET("/getroles", r1.GetRoles)
 		}
 	}
 	v2 := router.Group("/file")
@@ -67,7 +69,7 @@ func InitRouter() (router *gin.Engine) {
 		v3.POST("/updateuser", corll.UpdateUser)
 	}
 
-	t := corll.TestC{Mgo: db.InitMongoDB()}
+	t := corll.TestC{Mgo: db.InitMongoDB2()}
 	test := router.Group("/test/")
 	{
 		test.GET("/test1", t.TestInsert)
