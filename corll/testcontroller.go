@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/x/bsonx"
 	"log/log"
 	"myProject/db"
 	"net/http"
@@ -17,6 +18,17 @@ import (
 type TestC struct {
 	Mgo *mongo.Database
 	//RedisCli *redis.Client
+}
+
+func (t TestC) Test3(g *gin.Context) {
+	cur, err := t.Mgo.Collection(db.Test2).Indexes().List(context.Background())
+	t.Mgo.Collection(db.Test2).Indexes().CreateOne(context.Background(), mongo.IndexModel{
+		Keys: bsonx.Doc{{"height", bsonx.Int32(1)}, {"chainid", bsonx.Int32(1)}}, Options: options.Index().SetUnique(true),
+	})
+	if err != nil {
+		fmt.Printf(err.Error())
+	}
+	fmt.Print(cur)
 }
 
 func (t TestC) TestInsert(g *gin.Context) {
@@ -49,6 +61,35 @@ func (t TestC) TestInsert(g *gin.Context) {
 		g.JSON(http.StatusOK, rsp)
 		return
 	}
+}
+func (t TestC) Test1Insert(g *gin.Context) {
+	//rsp := new(Rsp)
+	//
+	//var tests []interface{}
+	//
+	//newuser := new(Test)
+	//
+	//newuser.Email = "sg"
+	//newuser.Username = "hhhhh"
+	//newuser.Password = "hhh"
+	//newuser.Phone =  "hhhhh"
+	//newuser.Address =  "hhhhh"
+	//newuser.Height = 123456
+	//tests = append(tests, newuser)
+	//
+	//insertID, err := t.Mgo.Collection(db.Test1).FindOneAndUpdate(context.Background(), tests, )
+	//fmt.Println(insertID)
+	//if err == nil {
+	//	rsp.Msg = "success"
+	//	rsp.Code = 200
+	//	g.JSON(http.StatusOK, rsp)
+	//	return
+	//} else {
+	//	rsp.Msg = "faild"
+	//	rsp.Code = 201
+	//	g.JSON(http.StatusOK, rsp)
+	//	return
+	//}
 }
 func (t TestC) Test2(g *gin.Context) {
 

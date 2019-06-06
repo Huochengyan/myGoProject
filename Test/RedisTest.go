@@ -10,7 +10,7 @@ import (
 func main() {
 	/* 获取  token 后存起来*/
 	redisopt := redis.Options{
-		Addr:     utils.GetConf("redis", "url"),
+		Addr:     utils.GetConf("redis").Key("url").String(),
 		DB:       0,
 		Password: "",
 	}

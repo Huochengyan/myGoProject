@@ -27,8 +27,9 @@ func InitRouter() (router *gin.Engine) {
 	//渲染html页面
 	// 静态资源加载，本例为css,js以及资源图片
 	router.Static("/myproject", "views/static")
-
+	//router.Static("/myproject", "view/")
 	//router.Static("static/*")
+
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
@@ -74,6 +75,7 @@ func InitRouter() (router *gin.Engine) {
 	{
 		test.GET("/test1", t.TestInsert)
 		test.GET("/test2", t.Test2)
+		test.GET("/test3", t.Test3)
 	}
 	return
 }
