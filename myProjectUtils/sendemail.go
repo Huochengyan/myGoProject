@@ -13,7 +13,7 @@ func SendMail(mailTo []string, subject string, body string) error {
 	//定义邮箱服务器连接信息，如果是阿里邮箱 pass填密码，qq邮箱填授权码
 	mailConn := map[string]string{
 		"user": "929914120@qq.com",
-		"pass": "929914120huo",
+		"pass": "****",
 		"host": "smpt.qq.com",
 		"port": "465",
 	}
