@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/go-ini/ini"
 	"github.com/robfig/cron"
 	"myProject/routers"
 	"os/exec"
@@ -11,9 +12,15 @@ import (
 func main() {
 	router := routers.InitRouter()
 	cronInit()
-	err := router.Run(":8888") // listen and serve on 0.0.0.0:8080
+
+	cfg, err := ini.Load("conf/app.ini")
 	if err != nil {
 		panic(err)
+	}
+
+	err1 := router.Run(cfg.Section("http").Key("port").String()) // listen and serve on 0.0.0.0:8080
+	if err1 != nil {
+		panic(err1)
 	}
 	fmt.Println("strart ......")
 
