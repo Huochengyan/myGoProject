@@ -66,8 +66,8 @@
                     console.log(data)
                     if(data.code==200) {
                         location.href = 'index.html'
-                        localStorage.setItem("username",$('input[name="username"]').val())
-                        localStorage.setItem("password",$('input[name="password"]').val())
+                        localStorage.setItem("myproject_username",$('input[name="username"]').val())
+                        localStorage.setItem("myproject_password",$('input[name="password"]').val())
                     }else{
                         alert(data.msg) //提示错误！！
                     }
