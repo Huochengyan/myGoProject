@@ -11,6 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
+	"math"
 	"myProject/db"
 	"myProject/pkg/util"
 	"net/http"
@@ -360,4 +361,77 @@ func (m UserC) GetUserByNameAndPassword(username string, password string) bool {
 		}
 	}
 	return false
+}
+
+/* 分页获取用户 */
+func (c *UserC) GetALLUserByPage(g *gin.Context) {
+	rsp := new(Rsp)
+	var info PostParamTx
+	err := g.BindJSON(&info)
+	if err != nil {
+		rsp.Msg = "json faild"
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+
+	page := info.Page
+	pageSize := info.Pagesize
+
+	data := new(ResultData)
+	data.PageNum = page
+	data.PageSize = pageSize
+
+	filter := bson.D{}
+
+	gender, _ := strconv.Atoi(info.Gender)
+	if info.Gender == "" {
+		filter = bson.D{{"gender", gender}}
+	}
+	if info.Address != "" {
+		filter = bson.D{{"address", info.Address}}
+	}
+
+	//if info.Height != "" {
+	//	selectInfo := new(primitive.E)
+	//	selectInfo.Key = "height"
+	//	selectInfo.Value = height
+	//	filter = append(filter, *selectInfo)
+	//}
+
+	opts := new(options.FindOptions)
+	limit := int64(pageSize)
+	skip := int64((page - 1) * pageSize)
+
+	sortMap := make(map[string]interface{})
+	sortMap["timestamp"] = -1
+	opts.Sort = sortMap
+
+	opts.Limit = &limit
+	opts.Skip = &skip
+	Txs, err := c.Mgo.Collection(db.User).Find(context.Background(), filter, opts)
+	if err != nil {
+		rsp.Code = 201
+		rsp.Msg = "get data error"
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+	data.DataList = make([]User, 0)
+	for Txs.Next(context.Background()) {
+		elem := new(User)
+		err := Txs.Decode(elem)
+		if err != nil {
+			log.Println(err.Error())
+		}
+		data.DataList = append(data.DataList, *elem)
+	}
+	//pagecount
+	sumCount, err := c.Mgo.Collection(db.User).CountDocuments(context.Background(), filter)
+	data.Pages = int(math.Ceil(float64(sumCount) / float64(pageSize)))
+	data.Total = int(sumCount)
+	rsp.Data = data
+	rsp.Code = 200
+	rsp.Msg = "success"
+	g.JSON(http.StatusOK, rsp)
+	return
 }

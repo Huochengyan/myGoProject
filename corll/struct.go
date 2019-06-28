@@ -42,3 +42,21 @@ type LoginInfo struct {
 	User  *User
 	Token string
 }
+
+type PostParamTx struct {
+	Page     int `json:"page"`
+	Pagesize int `json:"pagesize"`
+
+	//条件字段 （int 类型字段之所以用String，是应为int字段没有时，或默认为0的）
+	Address string `json:"address"`
+	Gender  string `json:"gender"`
+	Phone   string `json:"phone"`
+}
+
+type ResultData struct {
+	PageNum  int    `json:"pageNum"`
+	PageSize int    `json:"pageSize"`
+	Pages    int    `json:"pages"`
+	Total    int    `json:"total"`
+	DataList []User `json:"dataList"`
+}
