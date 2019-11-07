@@ -1,10 +1,37 @@
-# Created by .ignore support plugin (hsz.mobi)
-### Example user template template
-### Example user template
 
-# IntelliJ project files
-.idea
-*.iml
+# Created by .ignore support plugin (hsz.mobi)
+### Go template
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+*.bin
+views
+.views
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
 *.log
-out
-gen
+
+# 将删除 .idea/vcs.xml
+# 将删除 .idea/GrepConsole.xml
+.idea
+logs
+*.xls
+#将删除 logs/
+#将删除 pub.docker
+
+
+
+
+# Test binary, build with `go test -c`
+
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+
