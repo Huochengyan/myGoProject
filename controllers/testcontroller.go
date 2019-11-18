@@ -1,4 +1,4 @@
-package corll
+package controllers
 
 import (
 	"context"
@@ -21,6 +21,7 @@ type TestC struct {
 }
 
 func (t TestC) Test3(g *gin.Context) {
+
 	cur, err := t.Mgo.Collection(db.Test2).Indexes().List(context.Background())
 	t.Mgo.Collection(db.Test2).Indexes().CreateOne(context.Background(), mongo.IndexModel{
 		Keys: bsonx.Doc{{"height", bsonx.Int32(1)}, {"chainid", bsonx.Int32(1)}}, Options: options.Index().SetUnique(true),
@@ -105,11 +106,11 @@ func (t TestC) Test2(g *gin.Context) {
 	opts.Limit = &limit
 	opts.Skip = &skip
 
-	sortMap := make(map[string]interface{})
-	sortMap["height"] = -1
-	opts.Sort = sortMap
+	//sortMap := make(map[string]interface{})
+	//sortMap["height"] = -1
+	//opts.Sort = sortMap
 
-	filter := bson.D{{"email", "1111"}}
+	filter := bson.D{{}}
 	Txs, err := t.Mgo.Collection(db.Test).Find(context.Background(), filter)
 	if err != nil {
 		rsp.Code = 500
@@ -123,7 +124,7 @@ func (t TestC) Test2(g *gin.Context) {
 		if err != nil {
 			log.Error(err)
 		}
-
+		fmt.Println(elem.Id.Hex())
 		Tests = append(Tests, *elem)
 	}
 	rsp.Data = Tests

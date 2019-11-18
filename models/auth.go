@@ -1,6 +1,6 @@
 package models
 
-import "myProject/corll"
+import "myProject/controllers"
 
 type Auth struct {
 	ID       int    `gorm:"primary_key" json:"id"`
@@ -10,5 +10,5 @@ type Auth struct {
 
 type AuthUser struct {
 	Token string
-	User  corll.User
+	User  controllers.User
 }
