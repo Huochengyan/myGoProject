@@ -9,7 +9,7 @@ dbpwd=test
 collections=("nodeType" "conf" "chain" "exchangeType" "files" "nickName" "setting" "stacType" "user" "person")
 
 DATE=`date +%Y_%m_%d_%H_%M` #获取当前系统时间
-mongodump -h ${dbhost}  --port ${dbport} -u  ${dbuser}  -p ${dbpwd} -d ${dbname}    -o ~/${DATE}
+mongodump -h ${dbhost}  --port ${dbport} -u  ${dbuser}  -p ${dbpwd} -d ${dbname}    -o ./${DATE}
 
 
 # 57 14 * * * root /home/thk/go/src/myProject/backmongdb.sh

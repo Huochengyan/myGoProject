@@ -98,8 +98,8 @@ func gethtml(url string) {
 
 	req, _ := http.NewRequest("GET", url, nil)
 
-	//req.Header.Add("User-Agent", "PostmanRuntime/7.13.0")
-	//req.Header.Add("Accept", "*/*")
+	req.Header.Add("User-Agent", "PostmanRuntime/7.13.0")
+	req.Header.Add("Accept", "*/*")
 
 	res, _ := http.DefaultClient.Do(req)
 
