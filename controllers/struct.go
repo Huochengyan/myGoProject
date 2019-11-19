@@ -1,23 +1,14 @@
 package controllers
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"myProject/models"
+)
 
 type Rsp struct {
 	Code int         `json:"code"`
 	Msg  string      `json:"msg"`
 	Data interface{} `json:"data"`
-}
-
-/* user */
-type User struct {
-	Id         primitive.ObjectID `bson:"_id"`
-	Username   string             `json:"username"`
-	Password   string             `json:"password"`
-	Address    string             `json:"address"`
-	Gender     int                `json:"gender"`
-	Email      string             `json:"email"`
-	Phone      string             `json:"phone"`
-	CreateTime int32              `json:"crateTime"`
 }
 
 /* Test */
@@ -40,7 +31,7 @@ type Role struct {
 }
 
 type LoginInfo struct {
-	User  *User
+	User  *models.User
 	Token string
 }
 
@@ -55,9 +46,9 @@ type PostParamTx struct {
 }
 
 type ResultData struct {
-	PageNum  int    `json:"pageNum"`
-	PageSize int    `json:"pageSize"`
-	Pages    int    `json:"pages"`
-	Total    int    `json:"total"`
-	DataList []User `json:"dataList"`
+	PageNum  int           `json:"pageNum"`
+	PageSize int           `json:"pageSize"`
+	Pages    int           `json:"pages"`
+	Total    int           `json:"total"`
+	DataList []models.User `json:"dataList"`
 }

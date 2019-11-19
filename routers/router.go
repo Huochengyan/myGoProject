@@ -76,6 +76,8 @@ func InitRouter() (router *gin.Engine) {
 		test.GET("/test1", t.TestInsert)
 		test.GET("/test2", t.Test2)
 		test.GET("/test3", t.Test3)
+		test.GET("/test4", t.Test4)
+		test.GET("/test5", t.Test5)
 	}
 	return
 }

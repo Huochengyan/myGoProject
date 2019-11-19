@@ -13,6 +13,7 @@ import (
 	"log"
 	"math"
 	"myProject/db"
+	"myProject/models"
 	"myProject/pkg/util"
 	"net/http"
 	"strconv"
@@ -58,7 +59,7 @@ func (m UserC) Login(g *gin.Context) {
 		return
 	}
 	for cur.Next(context.Background()) {
-		elme := new(User)
+		elme := new(models.User)
 		err := cur.Decode(elme)
 		if err == nil {
 			if elme.Username == name && elme.Password == pass {
@@ -86,7 +87,7 @@ func (m UserC) Login(g *gin.Context) {
 /* insert user table */
 func (m UserC) Insertuser(g *gin.Context) {
 	rsp := new(Rsp)
-	newuser := new(User)
+	newuser := new(models.User)
 	var err1 *gvalid.Error
 	//1. 单参数校验
 	err1 = gvalid.Check(g.PostForm("gender"), "required|integer|between:0,150", nil)
@@ -171,11 +172,11 @@ func (m UserC) Insertuser(g *gin.Context) {
 func (m UserC) Queryalluser(g *gin.Context) {
 	fmt.Println("Queryalluser.........")
 	rsp := new(Rsp)
-	var users []User
+	var users []models.User
 	cur, err := m.Mgo.Collection(db.User).Find(context.Background(), bson.D{}, nil)
 	if err == nil {
 		for cur.Next(context.Background()) {
-			elme := new(User)
+			elme := new(models.User)
 			err := cur.Decode(elme)
 			if err == nil {
 				users = append(users, *elme)
@@ -202,9 +203,9 @@ func (m UserC) QueryByUsername(g *gin.Context) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	var users []User
+	var users []models.User
 	for cur.Next(context.Background()) {
-		elme := new(User)
+		elme := new(models.User)
 		err := cur.Decode(elme)
 		if err == nil {
 			users = append(users, *elme)
@@ -236,11 +237,11 @@ func (m UserC) Getalluser(g *gin.Context) {
 	//opts.Limit=int64(limit)
 	//排序 正序1 倒序-1  ----------------------------
 
-	var users []User
+	var users []models.User
 	cur, err := m.Mgo.Collection(db.User).Find(context.Background(), filter, opts)
 	if err == nil {
 		for cur.Next(context.Background()) {
-			elme := new(User)
+			elme := new(models.User)
 			err := cur.Decode(elme)
 			if err == nil {
 				users = append(users, *elme)
@@ -276,7 +277,7 @@ func (m UserC) Updateuser(g *gin.Context) {
 	newpassword := g.PostForm("password")
 	newgender, err := strconv.Atoi(g.PostForm("gender"))
 
-	user := new(User)
+	user := new(models.User)
 	user.Id = oldId
 
 	oldInfo := m.Mgo.Collection(db.User).FindOne(context.Background(), bson.M{"_id": oldId})
@@ -353,7 +354,7 @@ func (m UserC) GetUserByNameAndPassword(username string, password string) bool {
 	cur, err := m.Mgo.Collection(db.User).Find(context.Background(), findfilter)
 	if err == nil {
 		for cur.Next(context.Background()) {
-			elme := new(User)
+			elme := new(models.User)
 			err := cur.Decode(elme)
 			if err == nil {
 				return true
@@ -416,9 +417,9 @@ func (c *UserC) GetALLUserByPage(g *gin.Context) {
 		g.JSON(http.StatusOK, rsp)
 		return
 	}
-	data.DataList = make([]User, 0)
+	data.DataList = make([]models.User, 0)
 	for Txs.Next(context.Background()) {
-		elem := new(User)
+		elem := new(models.User)
 		err := Txs.Decode(elem)
 		if err != nil {
 			log.Println(err.Error())

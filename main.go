@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	_ "github.com/fvbock/endless"
 	"github.com/go-ini/ini"
 	"github.com/robfig/cron"
 	"io/ioutil"
@@ -54,8 +55,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
-	err1 := router.Run(cfg.Section("http").Key("port").String()) // listen and serve on 0.0.0.0:8080
+	port := cfg.Section("http").Key("port").String()
+	//endless.ListenAndServe(port,router)
+	err1 := router.Run(port) // listen and serve on 0.0.0.0:8080
 	if err1 != nil {
 		panic(err1)
 	}
@@ -106,5 +108,5 @@ func gethtml(url string) {
 	defer res.Body.Close()
 	body, _ := ioutil.ReadAll(res.Body)
 
-	fmt.Println(string(body)[:20])
+	fmt.Println(string(body))
 }
