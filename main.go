@@ -8,56 +8,35 @@ import (
 	"github.com/robfig/cron"
 	"io/ioutil"
 	"myProject/log"
+	"myProject/myProjectUtils"
 	"myProject/routers"
 	"net/http"
-	"os"
 	"os/exec"
 	"runtime"
-	"runtime/pprof"
 	"time"
 )
-
-var cpuprofile = flag.String("cpuprofile", "", "write cpu profile `file`")
-var memprofile = flag.String("memprofile", "", "write memory profile to `file`")
 
 func main() {
 	log.Info(time.Now().Format("2006-01-02 15:04:05") + "strart ......")
 	flag.Parse()
-	if *cpuprofile != "" {
-		f, err := os.Create(*cpuprofile)
-		if err != nil {
-			log.Error("could not create CPU profile: " + err.Error())
-		}
-		if err := pprof.StartCPUProfile(f); err != nil {
-			log.Error("could not start CPU profile: " + err.Error())
-		}
-		defer pprof.StopCPUProfile()
-	}
 
-	// ... rest of the program ...
-
-	if *memprofile != "" {
-		f, err := os.Create(*memprofile)
-		if err != nil {
-			log.Error("could not create memory profile: " + err.Error())
-		}
-		runtime.GC() // get up-to-date statistics
-		if err := pprof.WriteHeapProfile(f); err != nil {
-			log.Error("could not write memory profile: " + err.Error())
-		}
-		f.Close()
-	}
-
-	router := routers.InitRouter()
-	cronInit()
-
+	//cfg, err := ini.LoadSources(ini.LoadOptions{IgnoreInlineComment: true}, "conf/app.ini")
+	//if err != nil {
+	//	panic(err)
+	//}
 	cfg, err := ini.Load("conf/app.ini")
 	if err != nil {
 		panic(err)
 	}
+
+	myProjectUtils.Config = cfg
+
+	router := routers.InitRouter()
+	//cronInit()
+
 	port := cfg.Section("http").Key("port").String()
-	//endless.ListenAndServe(port,router)
-	err1 := router.Run(port) // listen and serve on 0.0.0.0:8080
+
+	err1 := router.Run(port)
 	if err1 != nil {
 		panic(err1)
 	}

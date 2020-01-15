@@ -1,9 +1,11 @@
 package routers
 
 import (
+	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"io"
+	"io/ioutil"
 	"myProject/controllers"
 	"myProject/db"
 	"myProject/middleware/jwt"
@@ -16,6 +18,8 @@ func InitRouter() (router *gin.Engine) {
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
 	router.Use(cors.New(config))
+
+	router.Use(middleware())
 
 	//log -------------------------------------------
 	// Disable Console Color, you don't need console color when writing the logs to file.
@@ -78,6 +82,19 @@ func InitRouter() (router *gin.Engine) {
 		test.GET("/test3", t.Test3)
 		test.GET("/test4", t.Test4)
 		test.GET("/test5", t.Test5)
+		test.GET("/test6", t.Test6)
+		test.POST("/test7", t.Test7)
 	}
+
 	return
+}
+
+func middleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		body := c.Request.Body
+		x, _ := ioutil.ReadAll(body)
+		fmt.Println("postBody:", string(x))
+		c.Next()
+		return
+	}
 }

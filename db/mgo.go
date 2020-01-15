@@ -28,8 +28,19 @@ func InitMongoDB2() (collection *mongo.Database) {
 var mgo *mongo.Database
 
 func connectDB() (collection *mongo.Database) {
-	var url = myProjectUtils.GetConf("mongo", "url")
-	opts := options.ClientOptions{Hosts: []string{url}}
+	//var url = myProjectUtils.GetConf("mongo", "url")
+	//opts := options.ClientOptions{
+	//	Hosts: []string{url}
+	//}
+
+	config := myProjectUtils.GetConfInfo("mongo")
+
+	opts := options.ClientOptions{Hosts: []string{config.Key("url").String()}}
+	credential := options.Credential{
+		Username: config.Key("username").String(), Password: config.Key("password").String(),
+		AuthSource: config.Key("db").String(),
+	}
+	opts.Auth = &credential
 
 	client, err := mongo.NewClient(&opts)
 	if err != nil {
