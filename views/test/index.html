@@ -2,9 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Test1</title>
+    <title></title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
 </head>
+<style>
+    body{
+        color: #2c3e50;
+        padding: 0;
+        margin: 0;
+    }
+    #inputtext{
+        width: 60%;
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+    .cnbtn{
+        border: #e7e1cd 1px solid;
+    }
+</style>
+<script type="text/javascript">
+    function toLower() {
+       var input=$("#inputtext").val();
+        $("#inputtext").val(input.toLocaleLowerCase());
+    }
+    function toupper(){
+        var input=$("#inputtext").val();
+        $("#inputtext").val(input.toUpperCase());
+    }
+</script>
 <body>
-test
+<textarea style="width: 700px;height: 300px" id="inputtext">
+
+</textarea>
+<br>
+<buton onclick="toLower()" class="cnbtn">转小写</buton>
+<buton onclick="toupper()" class="cnbtn">转大写</buton>
 </body>
 </html>

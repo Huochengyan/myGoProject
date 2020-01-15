@@ -6,11 +6,9 @@ import (
 	_ "github.com/fvbock/endless"
 	"github.com/go-ini/ini"
 	"github.com/robfig/cron"
-	"io/ioutil"
 	"myProject/log"
 	"myProject/myProjectUtils"
 	"myProject/routers"
-	"net/http"
 	"os/exec"
 	"runtime"
 	"time"
@@ -69,23 +67,5 @@ func cronInit() {
 
 // 加个定时器
 func myfunc() {
-	//fmt.Println("5秒打印一次！！")
-	url := "https://blog.csdn.net/u010919083/article/details/79358775"
-	gethtml(url)
-	url2 := "https://blog.csdn.net/u010919083/article/details/78210868"
-	gethtml(url2)
-}
-func gethtml(url string) {
-
-	req, _ := http.NewRequest("GET", url, nil)
-
-	req.Header.Add("User-Agent", "PostmanRuntime/7.13.0")
-	req.Header.Add("Accept", "*/*")
-
-	res, _ := http.DefaultClient.Do(req)
-
-	defer res.Body.Close()
-	body, _ := ioutil.ReadAll(res.Body)
-
-	fmt.Println(string(body))
+	fmt.Println("5秒打印一次！！")
 }
