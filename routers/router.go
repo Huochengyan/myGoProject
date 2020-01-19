@@ -19,7 +19,8 @@ func InitRouter() (router *gin.Engine) {
 	config.AllowAllOrigins = true
 	router.Use(cors.New(config))
 
-	router.Use(middleware())
+	//拦截所有请求
+	//router.Use(middleware())
 
 	//log -------------------------------------------
 	// Disable Console Color, you don't need console color when writing the logs to file.
@@ -30,7 +31,9 @@ func InitRouter() (router *gin.Engine) {
 	//-----------------------------------------------------------
 	//渲染html页面
 	// 静态资源加载，本例为css,js以及资源图片
-	router.Static("/myproject", "views/static")
+	//router.Static("/myproject", "views/static")
+	router.Static("/myproject", "views/test")
+	fmt.Println("open", "http://127.0.0.1/myproject/")
 	//router.Static("/myproject", "view/")
 	//router.Static("static/*")
 
