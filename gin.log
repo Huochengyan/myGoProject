@@ -1,6 +1,5 @@
 [GIN-debug] GET    /myproject/*filepath      --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
 [GIN-debug] HEAD   /myproject/*filepath      --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (4 handlers)
-[GIN-debug] GET    /ping                     --> myProject/routers.InitRouter.func1 (4 handlers)
 [GIN-debug] GET    /auth                     --> myProject/routers/api.GetAuth (4 handlers)
 [GIN-debug] POST   /user/login               --> myProject/controllers.UserC.Login-fm (4 handlers)
 [GIN-debug] POST   /user/insertuser          --> myProject/controllers.UserC.Insertuser-fm (5 handlers)
@@ -22,4 +21,4 @@
 [GIN-debug] GET    /test/test5               --> myProject/controllers.TestC.Test5-fm (4 handlers)
 [GIN-debug] GET    /test/test6               --> myProject/controllers.TestC.Test6-fm (4 handlers)
 [GIN-debug] POST   /test/test7               --> myProject/controllers.TestC.Test7-fm (4 handlers)
-[GIN-debug] Listening and serving HTTP on :8888
+[GIN-debug] Listening and serving HTTP on :8889

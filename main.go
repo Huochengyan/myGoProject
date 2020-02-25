@@ -18,10 +18,6 @@ func main() {
 	log.Info(time.Now().Format("2006-01-02 15:04:05") + "strart ......")
 	flag.Parse()
 
-	//cfg, err := ini.LoadSources(ini.LoadOptions{IgnoreInlineComment: true}, "conf/app.ini")
-	//if err != nil {
-	//	panic(err)
-	//}
 	cfg, err := ini.Load("conf/app.ini")
 	if err != nil {
 		panic(err)
@@ -30,10 +26,9 @@ func main() {
 	myProjectUtils.Config = cfg
 
 	router := routers.InitRouter()
-	//cronInit()
+	cronInit()
 
 	port := cfg.Section("http").Key("port").String()
-
 	err1 := router.Run(port)
 	if err1 != nil {
 		panic(err1)

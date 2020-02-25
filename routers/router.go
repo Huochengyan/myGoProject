@@ -4,13 +4,11 @@ import (
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"io"
 	"io/ioutil"
 	"myProject/controllers"
 	"myProject/db"
 	"myProject/middleware/jwt"
 	"myProject/routers/api"
-	"os"
 )
 
 func InitRouter() (router *gin.Engine) {
@@ -24,10 +22,10 @@ func InitRouter() (router *gin.Engine) {
 
 	//log -------------------------------------------
 	// Disable Console Color, you don't need console color when writing the logs to file.
-	gin.DisableConsoleColor()
-	// Logging to a file.
-	f, _ := os.Create("gin.log")
-	gin.DefaultWriter = io.MultiWriter(f)
+	//gin.DisableConsoleColor()
+	//// Logging to a file.
+	//f, _ := os.Create("gin.log")
+	//gin.DefaultWriter = io.MultiWriter(f)
 	//-----------------------------------------------------------
 	//渲染html页面
 	// 静态资源加载，本例为css,js以及资源图片
@@ -37,11 +35,11 @@ func InitRouter() (router *gin.Engine) {
 	//router.Static("/myproject", "view/")
 	//router.Static("static/*")
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+	//router.GET("/ping", func(c *gin.Context) {
+	//	c.JSON(200, gin.H{
+	//		"message": "pong",
+	//	})
+	//})
 
 	/* 获得授权Token */
 	router.GET("/auth", api.GetAuth)
