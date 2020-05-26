@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	_ "github.com/fvbock/endless"
 	"github.com/go-ini/ini"
 	"github.com/robfig/cron"
 	"myProject/log"

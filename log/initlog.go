@@ -1,7 +1,7 @@
 package log
 
 import (
-	go_logger "github.com/phachon/go-logger"
+	"github.com/phachon/go-logger"
 	"os"
 )
 

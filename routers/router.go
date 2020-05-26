@@ -83,8 +83,8 @@ func InitRouter() (router *gin.Engine) {
 		test.GET("/test3", t.Test3)
 		test.GET("/test4", t.Test4)
 		test.GET("/test5", t.Test5)
-		test.GET("/test6", t.Test6)
-		test.POST("/test7", t.Test7)
+		//test.GET("/test6", t.Test6)
+		//test.POST("/test7", t.Test7)
 	}
 
 	return

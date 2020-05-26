@@ -8,7 +8,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/x/bsonx"
-	"log/log"
 	"myProject/db"
 	"net/http"
 	"strconv"
@@ -122,7 +121,7 @@ func (t TestC) Test2(g *gin.Context) {
 		elem := new(Test)
 		err := Txs.Decode(elem)
 		if err != nil {
-			log.Error(err)
+			//log.Error(err)
 		}
 		fmt.Println(elem.Id.Hex())
 		Tests = append(Tests, *elem)
