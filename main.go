@@ -25,6 +25,7 @@ func main() {
 	myProjectUtils.Config = cfg
 
 	router := routers.InitRouter()
+	//定时器应用
 	cronInit()
 
 	port := cfg.Section("http").Key("port").String()
