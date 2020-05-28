@@ -34,10 +34,7 @@ func main() {
 		panic(err1)
 	}
 	log.Info("strart ......")
-
-	//调用浏览器打开页面
-	//OpenUrl("https://www.baidu.com")
-	//browser.OpenURL("http://www.baidu.com")
+	fmt.Println("open", "http://127.0.0.1:8888/myproject/")
 }
 
 var commands = map[string]string{

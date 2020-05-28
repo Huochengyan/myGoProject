@@ -31,7 +31,6 @@ func InitRouter() (router *gin.Engine) {
 	// 静态资源加载，本例为css,js以及资源图片
 	//router.Static("/myproject", "views/static")
 	router.Static("/myproject", "views/static")
-	fmt.Println("open", "http://127.0.0.1/myproject/")
 	//router.Static("/myproject", "view/")
 	//router.Static("static/*")
 
