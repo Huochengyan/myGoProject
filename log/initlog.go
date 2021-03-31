@@ -50,7 +50,7 @@ func init() {
 
 	// 文件输出配置
 	fileConfig := &go_logger.FileConfig{
-		Filename: "./logs/publicchain.log", // 日志输出文件名，不自动存在
+		Filename: "./logs/my.log", // 日志输出文件名，不自动存在
 		// 如果要将单独的日志分离为文件，请配置LealFrimeNem参数。
 		LevelFileName: map[int]string{
 			Logger.LoggerLevel("error"): "./logs/error.log", // Error 级别日志被写入 error .log 文件

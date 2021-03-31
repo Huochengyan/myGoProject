@@ -86,7 +86,7 @@ func InitRouter() (router *gin.Engine) {
 		//test.GET("/test6", t.Test6)
 		//test.POST("/test7", t.Test7)
 	}
-	fmt.Println("open", "http://127.0.0.1:8888/myproject/login.html")
+
 	return
 }
 
