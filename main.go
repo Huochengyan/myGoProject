@@ -35,6 +35,7 @@ func main() {
 	}
 	log.Info("strart ......")
 	fmt.Println("open", "http://127.0.0.1:8888/myproject/")
+
 }
 
 var commands = map[string]string{

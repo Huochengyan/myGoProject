@@ -9,6 +9,7 @@ import (
 	"myProject/db"
 	"myProject/middleware/jwt"
 	"myProject/routers/api"
+	"os/exec"
 )
 
 func InitRouter() (router *gin.Engine) {
@@ -31,7 +32,7 @@ func InitRouter() (router *gin.Engine) {
 	// 静态资源加载，本例为css,js以及资源图片
 	//router.Static("/myproject", "views/static")
 	router.Static("/myproject", "views/static")
-	//fmt.Println("open", "http://127.0.0.1/myproject/")
+	fmt.Println("open", "http://127.0.0.1:8888/myproject/")
 	//router.Static("/myproject", "view/")
 	//router.Static("static/*")
 
@@ -85,6 +86,12 @@ func InitRouter() (router *gin.Engine) {
 		test.GET("/test5", t.Test5)
 		//test.GET("/test6", t.Test6)
 		//test.POST("/test7", t.Test7)
+	}
+
+	cmd := exec.Command("explorer", "http://127.0.0.1:8888/myproject/")
+	err2 := cmd.Start()
+	if err2 != nil {
+		fmt.Println(err2.Error())
 	}
 
 	return
