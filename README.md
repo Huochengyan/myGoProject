@@ -1,6 +1,6 @@
 # myGoProject(下载请根据分支版本最新的下载)
 
-## 1. go版本介绍：go1.11.5
+## 1. go版本介绍：go1.11.5/go1.12.6
    go下载链接: https://pan.baidu.com/s/1sFEKwQOB8xVnvzD0qQVuPg 提取码: 25mb 
    
 ## 2. mongodb version 3.4.20

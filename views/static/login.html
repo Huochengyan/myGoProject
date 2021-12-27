@@ -65,6 +65,7 @@
                 success:function(data){
                     console.log(data)
                     if(data.code==200) {
+                        localStorage.setItem("token",data.data.Token)
                         location.href = 'index.html'
                         localStorage.setItem("myproject_username",$('input[name="username"]').val())
                         localStorage.setItem("myproject_password",$('input[name="password"]').val())

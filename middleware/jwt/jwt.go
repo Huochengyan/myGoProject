@@ -30,7 +30,10 @@ func JWT() gin.HandlerFunc {
 		} else {
 			token = kv[1]
 		}
-
+		tokenstr := c.Request.Header.Get("token")
+		if tokenstr != "" {
+			print(tokenstr)
+		}
 		//================================================
 
 		if token == "" {

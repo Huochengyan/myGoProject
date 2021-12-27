@@ -53,12 +53,17 @@ func OpenUrl(uri string) {
 func cronInit() {
 	go func() {
 		crontab := cron.New()
-		crontab.AddFunc("*/20 * * * *", myfunc) //5S
+		crontab.AddFunc("*/1 * * * *", myfunc) //1 分钟
 		crontab.Start()
 	}()
 }
 
 // 加个定时器
 func myfunc() {
-	fmt.Println("5秒打印一次！！")
+	fmt.Println(time.Now(), "5秒打印一次！！")
+
+	//fmt.Println(runtime.NumCPU())
+	//fmt.Println(utils.GetCpuPercent())
+	//fmt.Println(utils.GetDiskPercent())
+	//fmt.Println(utils.GetMemPercent())
 }

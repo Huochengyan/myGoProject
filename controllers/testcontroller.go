@@ -141,3 +141,38 @@ func (t TestC) GetTestInfo(g *gin.Context) {
 	g.JSON(http.StatusOK, rsp)
 	return
 }
+func (t TestC) GetTestAddMyql(g *gin.Context) {
+	resultList := new(ResultAccountList)
+	db := db.InitMysqlDb()
+	rows, err := db.Query("select * from account;")
+	if err == nil {
+		fmt.Println(rows)
+
+		// for循环
+		for rows.Next() {
+			accountInfo := new(AccountInfo)
+			errS := rows.Scan(&accountInfo.Id, &accountInfo.UserName, &accountInfo.Password)
+			if errS != nil {
+				fmt.Print(errS.Error())
+			}
+			resultList.DataList = append(resultList.DataList, *accountInfo)
+		}
+		fmt.Print(resultList)
+	}
+
+	rsp := new(Rsp)
+	rsp.Msg = "faild"
+	rsp.Code = 201
+	rsp.Data = resultList
+	g.JSON(http.StatusOK, rsp)
+	return
+}
+
+type ResultAccountList struct {
+	DataList []AccountInfo `json:"dataList"`
+}
+type AccountInfo struct {
+	Id       int    `json:"id"`
+	UserName string `json:"username"`
+	Password string `json:"password"`
+}

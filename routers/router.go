@@ -18,7 +18,7 @@ func InitRouter() (router *gin.Engine) {
 	config.AllowAllOrigins = true
 	router.Use(cors.New(config))
 
-	//拦截所有请求
+	//拦截所有请求 打印下
 	//router.Use(middleware())
 
 	//log -------------------------------------------
@@ -86,6 +86,7 @@ func InitRouter() (router *gin.Engine) {
 		test.GET("/test5", t.Test5)
 		//test.GET("/test6", t.Test6)
 		//test.POST("/test7", t.Test7)
+		test.GET("/test8", t.GetTestAddMyql)
 	}
 
 	cmd := exec.Command("explorer", "http://127.0.0.1:8888/myproject/")
