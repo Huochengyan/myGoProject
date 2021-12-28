@@ -8,6 +8,7 @@ import (
 	"myProject/log"
 	"myProject/myProjectUtils"
 	"myProject/routers"
+	"myProject/utils"
 	"os/exec"
 	"runtime"
 	"time"
@@ -62,8 +63,9 @@ func cronInit() {
 func myfunc() {
 	fmt.Println(time.Now(), "5秒打印一次！！")
 
-	//fmt.Println(runtime.NumCPU())
-	//fmt.Println(utils.GetCpuPercent())
-	//fmt.Println(utils.GetDiskPercent())
-	//fmt.Println(utils.GetMemPercent())
+	fmt.Println(runtime.NumCPU())
+	fmt.Println(utils.GetCpuPercent())
+	fmt.Println(utils.GetDiskPercent())
+	fmt.Println(utils.GetMemPercent())
+
 }
