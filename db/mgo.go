@@ -60,9 +60,10 @@ func connectDB() (collection *mongo.Database) {
 
 /* mongodb table Name */
 const (
-	User  string = "user"
-	Role  string = "role"
-	Test  string = "test"
-	Test1 string = "test1"
-	Test2 string = "test2"
+	User   string = "user"
+	Role   string = "role"
+	Test   string = "test"
+	Test1  string = "test1"
+	Test2  string = "test2"
+	PcInfo string = "pcinfo"
 )
