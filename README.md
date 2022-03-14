@@ -11,6 +11,9 @@
 
 http://localhost:8888/myproject/login.html
 
+查看项目相关截图:
+![Image text](views/img/Readme_img_2.png)
+
 ![Image text](views/img/Readme_img_1.png)
 
 ## 4. 使用jwt 进行token验证 鉴权
@@ -34,6 +37,11 @@ Token 验证失败
    采用自动生成数据表的方式，通过添加struct 后保存到数据库时自动生成数据表格。
 ## 6. 更新说明
 2022年1月1日更新
+
+## 7. 联系我们
+可关注我们的公众号获取最新的更新和文章
+![Image text](views/img/qrcode.jpg)
+
 ##### GO SDK 有1.12 升级到了 1.17 
 更新到了最新版。
 另外有小伙伴获取代码后提示找不到 里面的库。
