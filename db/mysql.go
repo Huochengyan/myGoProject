@@ -10,6 +10,10 @@ const (
 	DB_Driver = "root:root@tcp(localhost:3306)/hcydb?charset=utf8"
 )
 
+/*
+   mysql访问方法。
+
+*/
 //-go import : go get -u github.com/go-sql-driver/mysql
 
 func openDB() (success bool, db *sql.DB) {

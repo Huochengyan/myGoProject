@@ -8,6 +8,10 @@ import (
 	"time"
 )
 
+/*
+   mongodb访问方法。
+
+*/
 const dbName = "mycol"
 
 /* mongodb */
