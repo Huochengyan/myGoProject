@@ -1,0 +1,2 @@
+#指定版本包下载
+go mod edit -require github.com/gin-gonic/gin@1.2.3
