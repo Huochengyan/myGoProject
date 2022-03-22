@@ -49,6 +49,11 @@ Token 验证失败
 也可以百度网盘下载关联包：
 链接：https://pan.baidu.com/s/1p7utX70PrjSZmpW5_02ULg 
 提取码：25mb
+
+#### GO SDK 更新到了1.18
+有小伙伴说采用GO Path管理包不太好用的。在这个版本内也采用了mod了。更加方便包的管理了。
+新mod管理包代码：https://github.com/Huochengyan/myGoProjectNew
+放到这里了。这个会在2022.4.1日前全面替换掉。届时只保留此版本。
 #
 本人博客：https://blog.csdn.net/u010919083
 
