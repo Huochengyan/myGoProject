@@ -28,7 +28,4 @@ func main() {
 	if err1 != nil {
 		fmt.Println(err)
 	}
-	fmt.Println("strart ......")
-	fmt.Println("open", "http://127.0.0.1:8888/myproject/")
-
 }
