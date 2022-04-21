@@ -1,0 +1,21 @@
+# go env
+export GOROOT=/opt/go
+export GOBIN=$GOROOT/bin
+
+
+export PATH=/opt/go/bin
+
+
+
+---------------------
+
+1.
+vim ~/.bashrc
+2. go 的安装路径
+export PATH=$PATH:/opt/go/bin/
+3.
+source ~/.profile
+
+不错的文章：
+
+http://www.cnblogs.com/wdliu/p/9272220.html
