@@ -12,3 +12,4 @@ go env
 #开始下载
 go mod tidy
 
+
