@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"myProject/db"
+	"myGoProjectNew/db"
 	"net/http"
 )
 

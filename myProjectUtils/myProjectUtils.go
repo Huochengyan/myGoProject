@@ -1,12 +1,15 @@
 package myProjectUtils
 
-import "github.com/go-ini/ini"
+import (
+	"fmt"
+	"github.com/go-ini/ini"
+)
 
 /* 获取配置conf文件的参数信息 */
 func GetConf(name string, key string) string {
 	cfg, err := ini.Load("conf/app.ini")
 	if err != nil {
-		panic(err)
+		fmt.Printf(err.Error())
 	}
 	return cfg.Section(name).Key(key).String()
 }
