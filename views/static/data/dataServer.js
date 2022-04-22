@@ -2,7 +2,7 @@ function methodInfo(methodName,data){
     this.method=methodName
     this.data=data
 }
-let serverOrigin=location.origin;
+let serverOrigin=window.location.origin;
 let serverUrl=serverOrigin+'/v1';
 let code_success=200;
 var dataServer= {
