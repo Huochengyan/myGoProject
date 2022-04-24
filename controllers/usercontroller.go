@@ -139,3 +139,120 @@ func (m UserC) Getalluser(g *gin.Context) {
 	g.JSON(http.StatusOK, rsp)
 	return
 }
+
+/**
+获取用户列表
+*/
+func (m UserC) GetUserList(g *gin.Context) {
+	rsp := new(Rsp)
+	//pageIndex := g.PostForm("pageIndex")
+	//pageSize := g.PostForm("pageSize")
+	//fmt.Println(pageIndex+pageSize)
+
+	var info models.PageHelper
+	err := g.BindJSON(&info)
+	if err != nil {
+		rsp.Msg = "json faild"
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+	page := info.PageIndex
+	pageSize := info.PageSize
+
+	/* 默认 */
+	if page == 0 {
+		page = 1
+	}
+	if pageSize == 0 {
+		pageSize = 10
+	}
+
+	opts := new(options.FindOptions)
+	limit := int64(pageSize)
+	skip := int64((page - 1) * pageSize)
+	opts.Limit = &limit
+	opts.Skip = &skip
+
+	filter := bson.M{}
+
+	//limit, err := strconv.Atoi(g.Query("limit"))
+	//page, err := strconv.Atoi(g.Query("page"))
+	//fmt.Println(page)
+
+	//排序 正序1 倒序-1  ----------------------------
+	//opts := new(options.FindOptions)
+	//sortMap := make(map[string]interface{})
+	//sortMap["gender"] = -1
+	//opts.Sort = sortMap
+	//opts.Limit=int64(limit)
+	//排序 正序1 倒序-1  ----------------------------
+
+	//var users []models.User
+	users := make([]interface{}, 0)
+	cur, err := m.Mgo.Collection(db.User).Find(context.Background(), filter, opts)
+	if err == nil {
+		for cur.Next(context.Background()) {
+			elme := new(models.User)
+			err := cur.Decode(elme)
+			if err == nil {
+				users = append(users, *elme)
+			}
+		}
+	}
+
+	sCount, _ := m.Mgo.Collection(db.User).CountDocuments(context.Background(), filter)
+
+	var resultData models.UserList
+	resultData.Data = users
+	resultData.Total = sCount
+
+	rsp.Msg = "success"
+	rsp.Code = 0
+	rsp.Data = resultData
+	g.JSON(http.StatusOK, rsp)
+	return
+}
+
+/**
+修改用户列表
+*/
+func (m UserC) Update(g *gin.Context) {
+	rsp := new(Rsp)
+	var info models.User
+	err := g.BindJSON(&info)
+	if err != nil {
+		rsp.Msg = "json faild"
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+
+	if info.Id.String() == "" {
+		rsp.Msg = "id is empty!"
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+
+	filter := bson.D{{"_id", info.Id}}
+	//selector := bson.M{"_id": updateId}
+	//updateInfo,_ :=bson.Marshal(&info)
+	result := m.Mgo.Collection(db.User).FindOneAndReplace(context.Background(), filter, info)
+	if result != nil {
+		if result.Err() != nil {
+			fmt.Println(result.Err())
+		}
+		rsp.Msg = "success"
+		rsp.Code = 200
+		rsp.Data = 1
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+	rsp.Msg = "err"
+	rsp.Code = 201
+	rsp.Data = 0
+	g.JSON(http.StatusOK, rsp)
+	return
+
+}

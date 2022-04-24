@@ -13,3 +13,13 @@ type User struct {
 	Phone      string             `json:"phone"`
 	CreateTime int32              `json:"crateTime"`
 }
+
+type PageHelper struct {
+	PageIndex int `json:"pageIndex"`
+	PageSize  int `json:"pageSize"`
+}
+
+type UserList struct {
+	Total int64       `json:"total"`
+	Data  interface{} `json:"data"`
+}

@@ -3,7 +3,7 @@ function methodInfo(methodName,data){
     this.data=data
 }
 let serverOrigin=window.location.origin;
-let serverUrl=serverOrigin+'/v1';
+let serverUrl=serverOrigin+'';
 let code_success=200;
 var dataServer= {
     //向服务器法送数据
@@ -63,18 +63,23 @@ var dataServer= {
     getSensorList: function (postData) {
         var url = serverUrl + "/sensor/list";
         $.ajaxSettings.async = false;
-        return sensorServer.postServerData(url, postData);
+        return dataServer.postServerData(url, postData);
     },
     // 获取所有用户 getAllUser
     Queryalluser: function (postData) {
         var url = serverUrl + "/user/queryalluser";
         $.ajaxSettings.async = false;
-        return sensorServer.postServerData(url, postData);
+        return dataServer.postServerData(url, postData);
     },
     // 获取所有用户 getAllUser
-    GetUserList: function (postData) {
-        var url = serverUrl + "/user/queryalluser";
+    getUserList: function (postData) {
+        var url = serverUrl + "/user/getUserList";
         $.ajaxSettings.async = false;
-        return sensorServer.postServerData(url, postData);
+        return dataServer.postServerData(url, postData);
+    },
+    updateUserInfo:function (postData) {
+        var url = serverUrl + "/user/update";
+        $.ajaxSettings.async = false;
+        return dataServer.postServerData(url, postData);
     },
 }

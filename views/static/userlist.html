@@ -13,6 +13,8 @@
     <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/xadmin.js"></script>
     <script type="text/javascript" src="js/cookie.js"></script>
+    <script src="data/dataServer.js"></script>
+
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -41,7 +43,8 @@
         </form>
     </div>
 
-    <table class="" id="demo" lay-filter="test"></table>
+    <table id="demo" class="layui-table" lay-filter="test_table" ></table>
+    <div id="test1"></div>
 
 </div>
 <script type="text/html" id="toolbarDemo">
@@ -54,31 +57,168 @@
 
 <script>
 
-    layui.use('table', function() {
-        var table = layui.table;
-        var laypage = layui.laypage;
+    // layui.use('table', function() {
+    //     var table = layui.table;
+    //     var laypage = layui.laypage;
+    //
+    //     //执行一个laypage实例
+    //     laypage.render({
+    //         elem: 'demo' //注意，这里的 test1 是 ID，不用加 # 号
+    //         ,count: 50 //数据总数，从服务端得到
+    //     });
+    //
+    //     //执行渲染
+    //     table.render({
+    //         elem: '#demo' //指定原始表格元素选择器（推荐id选择器）
+    //         , url: 'http://127.0.0.1:8888/user/getalluser?token='+localStorage.getItem("token")
+    //         , height: 600 //容器高度
+    //         , cols: [[ //表头
+    //              {field: 'username', title: '用户名', width: 80}
+    //             ,{field: 'gender', title: '性别', width: 80}
+    //             ,{field: 'password', title: '密码', width: 80}
+    //             ,{field: 'address', title: '地址', width: 80}
+    //             ,{field: 'email', title: '邮箱', width: 80}
+    //             ,{field: 'phone', title: '电话', width: 80}
+    //         ]]
+    //     });
+    // });
 
-        //执行一个laypage实例
-        laypage.render({
-            elem: 'demo' //注意，这里的 test1 是 ID，不用加 # 号
-            ,count: 50 //数据总数，从服务端得到
-        });
 
-        //执行渲染
-        table.render({
-            elem: '#demo' //指定原始表格元素选择器（推荐id选择器）
-            , url: 'http://127.0.0.1:8888/user/getalluser?token='+localStorage.getItem("token")
-            , height: 600 //容器高度
-            , cols: [[ //表头
-                 {field: 'username', title: '用户名', width: 80}
-                ,{field: 'gender', title: '性别', width: 80}
-                ,{field: 'password', title: '密码', width: 80}
-                ,{field: 'address', title: '地址', width: 80}
-                ,{field: 'email', title: '邮箱', width: 80}
-                ,{field: 'phone', title: '电话', width: 80}
-            ]]
-        });
+    $(function (){
+        initData();
     });
+    //请求数据
+    function getData(page,limit) {
+        var resultData;
+       // let sensorPid=$("#select_address").val();
+        var params={"pageIndex":page,"pageSize":limit}
+        resultData = dataServer.getUserList(params);
+        return resultData;
+    }
+    function initData(){
+        var initData=getData(1,10);
+        var total=initData.total;
+        var dataList=initData.data;
+        layui.use('table', function(){
+            var laypage = layui.laypage;
+            //执行一个laypage实例
+            laypage.render({
+                elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
+                ,count: total //数据总数，从服务端得到
+                //,limit:10
+                ,limits:[10,20,30]
+                ,curr:1
+                ,group:5
+                ,layout: ['prev', 'page', 'next','limit','refresh','skip','count']
+                ,jump: function(obj, first){
+                    //obj包含了当前分页的所有参数，比如：
+                    console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                    console.log(obj.limit); //得到每页显示的条数
+                    //首次不执行
+                    if(!first){
+                        refData(getData(obj.curr,obj.limit).data);
+                    }else{
+                        refData(dataList);
+                    }
+
+                }
+            });
+        });
+    }
+
+
+    function refData(dataList){
+        //var dataList=dataArraygetData(page,limit).data;
+        layui.use('table', function () {
+            var table = layui.table;
+            //第一个实例
+            table.render({
+                elem: '#demo'
+                ,height: 450
+                ,data: dataList
+                ,limit:dataList.length
+                //page:false
+                ,cols: [[ //表头
+                    {field: 'Id', title: '编号', width: 80, sort: true, fixed: 'left'}
+                    ,{field: 'username', title: '用户名' , edit: 'text'}
+                    ,{field: 'gender', title: '性别', width: 80 , edit: 'text'}
+                    ,{field: 'password', title: '密码', width: 80 , edit: 'text'}
+                    ,{field: 'address', title: '地址', width: 80 , edit: 'text'}
+                    ,{field: 'email', title: '邮箱', width: 80 , edit: 'text'}
+                    ,{field: 'phone', title: '电话', width: 80 , edit: 'text'}
+                    , {field: '', title: '编辑', width: 250, sort: true, toolbar:'#toolbarDemo'}
+                ]],
+                loading:true,
+                done:function (res, curr, count) {
+                    $("[data-field='status']").children().each(function(){
+                        if($(this).text()==0){
+                            $(this).text("告警中")
+                        }else if($(this).text()==1){
+                            $(this).text("结束")
+                        }else if($(this).text()==2){
+                            $(this).text("已处理")
+                        }
+                    });
+                },
+                parseData:function(res){
+                    return {
+                        "code" : res.code, //解析接口状态
+                        "msg" : res.msg, //解析提示文本
+                        "data" : res.data //解析数据列表
+                    }
+                }
+            });
+
+            //监听单元格编辑
+            table.on('edit(test_table)',
+                function (obj) {
+                    var value = obj.value //得到修改后的值
+                        ,
+                        data = obj.data //得到所在行所有键值
+                        ,
+                        field = obj.field; //得到字段
+                    layer.msg('[ID: ' + data.Id + '] ' + field + ' 字段更改为：' + value);
+                    console.log(data.Id);
+                    var jsonResult = dataServer.updateUserInfo(obj.data);
+                    if(jsonResult==1){
+                        layer.alert("更新成功", {icon: 6},function () {
+                            x_admin_father_reload();
+                        });
+                    }else{
+                        layer.msg("更新成功！");
+                    }
+                });
+
+            //监听行单击事件（双击事件为：rowDouble）
+            // table.on('row(test_table)', function(obj){
+            //     var data = obj.data;
+            //     layer.alert(JSON.stringify(data), {
+            //         title: '当前行数据：'
+            //     });
+            //
+            //     //标注选中样式
+            //     obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+            // });
+
+            //列里的工具栏
+            table.on('tool(test_table)',
+                function(obj) {
+                    //var checkStatus = table.checkStatus(obj.config.pid);
+                    switch (obj.event) {
+                        case 'delete':
+                            layer.msg('data:'+obj.data.id);
+                            del(obj);
+                            break;
+                        case 'updateWarningInfo':
+                            layer.msg('data:'+obj.data.pid);
+                            xadmin.open('报警处置','./warningSummaryList-edit.html'+"?id="+obj.data.id,600,400);
+                            break;
+                        //updateWarningInfo(obj);
+                        //break;
+                    };
+                });
+        });
+    }
 
 </script>
 </body>
