@@ -11,9 +11,10 @@
         <link rel="stylesheet" href="./css/font.css">
         <link rel="stylesheet" href="./css/xadmin.css">
          <link rel="stylesheet" href="./css/theme5.css">
+        <script type="text/javascript" src="./js/jquery.min.js"></script>
         <script src="./lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="./js/xadmin.js"></script>
-        <script type="text/javascript" src="./js/jquery.min.js"></script>
+
 
         <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
         <!--[if lt IE 9]>
@@ -31,6 +32,7 @@
         </script>
         <script src="data/sensor.js"></script>
         <link rel="stylesheet" href="lib/layui/css/layui.css">
+        <script src="data/dataServer.js"></script>
     </head>
     <body class="index" style="background-color: white;">
         <!-- 顶部开始 -->
@@ -222,7 +224,7 @@
         let text=msg;
         layer.open({
             type: 1
-            ,title: "超限消息"
+            ,title: "欢迎消息"
             ,offset: "rb" //具体配置参考：http://www.layui.com/doc/modules/layer.html#offset
             ,id: 'layerDemo1' //防止重复弹出
             ,content: text  //弹出网页 ,content: 'http://www.baidu.com' 上边的type 设置为2即可

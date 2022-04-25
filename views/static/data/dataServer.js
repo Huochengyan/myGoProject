@@ -87,4 +87,9 @@ var dataServer= {
         $.ajaxSettings.async = false;
         return dataServer.postServerData(url, postData);
     },
+    addUserInfo:function (postData) {
+        var url = serverUrl + "/user/add";
+        $.ajaxSettings.async = false;
+        return dataServer.postServerData(url, postData);
+    },
 }

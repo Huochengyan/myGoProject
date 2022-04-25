@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
@@ -287,6 +288,49 @@ func (m UserC) DelUser(g *gin.Context) {
 		if result.Err() != nil {
 			fmt.Println(result.Err())
 		}
+		rsp.Msg = "success"
+		rsp.Code = 200
+		rsp.Data = 1
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+	rsp.Msg = "err"
+	rsp.Code = 201
+	rsp.Data = 0
+	g.JSON(http.StatusOK, rsp)
+	return
+
+}
+
+/**
+新加 用户信息
+*/
+
+func (m UserC) AddUser(g *gin.Context) {
+	rsp := new(Rsp)
+	var info models.User
+	err := g.BindJSON(&info)
+	if err != nil {
+		rsp.Msg = "json faild"
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+
+	if info.Id.String() == "" {
+		rsp.Msg = "id is empty!"
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+
+	//filter := bson.D{{"_id", info.Id}}
+	//selector := bson.M{"_id": updateId}
+	//updateInfo,_ :=bson.Marshal(&info)
+	info.Id = primitive.NewObjectID()
+	result, err := m.Mgo.Collection(db.User).InsertOne(context.Background(), info)
+	if err == nil {
+		fmt.Println(result.InsertedID)
 		rsp.Msg = "success"
 		rsp.Code = 200
 		rsp.Data = 1

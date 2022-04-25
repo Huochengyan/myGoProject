@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"myGoProjectNew/controllers"
 	"myGoProjectNew/db"
+	"myGoProjectNew/middleware/jwt"
 	"myGoProjectNew/routers/api"
 	"os/exec"
 )
@@ -49,8 +50,8 @@ func InitRouter() (router *gin.Engine) {
 	v1 := router.Group("/user/")
 	{
 		v1.POST("/login", t1.Login)
-		//v1.Use(jwt.JWT())
-		v1.Use()
+		v1.Use(jwt.JWT())
+		//v1.Use()
 		{
 			v1.GET("/getalluser", t1.Getalluser)
 			//v1.POST("/insertuser", t1.Insertuser)
@@ -63,6 +64,7 @@ func InitRouter() (router *gin.Engine) {
 			v1.POST("/getUserList", t1.GetUserList)
 			v1.POST("/update", t1.Update)
 			v1.POST("/delete", t1.DelUser)
+			v1.POST("/add", t1.AddUser)
 		}
 
 	}

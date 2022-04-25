@@ -12,7 +12,8 @@
         <script type="text/javascript" src="./js/jquery.min.js"></script>
         <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="./js/xadmin.js"></script>
-        <script type="text/javascript" src="./data/sensor.js"></script>
+        <script type="text/javascript" src="./data/dataServer.js"></script>
+
         <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
         <!--[if lt IE 9]>
             <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -32,9 +33,9 @@
 
                     <div class="layui-form-item">
                         <label for="L_deviceIp" class="layui-form-label">
-                            <span class="x-red">*</span>LED设备IP:</label>
+                            <span class="x-red">*</span>用户名:</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="L_deviceIp" name="ipaddress" required="" lay-verify="ipddress" autocomplete="off" class="layui-input"></div>
+                            <input type="text" id="L_deviceIp" name="username" required="" lay-verify="username" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="select_address" class="layui-form-label">
@@ -47,21 +48,21 @@
                     </div>
                         <div class="layui-form-item">
                             <label for="L_locationX" class="layui-form-label">
-                                <span class="x-red">*</span>位置X:</label>
+                                <span class="x-red">*</span>密码:</label>
                             <div class="layui-input-inline">
-                                <input type="text" id="L_locationX" name="coordinatex" required="" lay-verify="coordinatex" autocomplete="off" class="layui-input"></div>
+                                <input type="text" id="L_locationX" name="password" required="" lay-verify="password" autocomplete="off" class="layui-input"></div>
                         </div>
                         <div class="layui-form-item">
                             <label for="L_locationY" class="layui-form-label">
-                                <span class="x-red">*</span>位置Y:</label>
+                                <span class="x-red">*</span>邮箱:</label>
                             <div class="layui-input-inline">
-                                <input type="text" id="L_locationY" name="coordinatey" required="" lay-verify="coordinatey" autocomplete="off" class="layui-input"></div>
+                                <input type="text" id="L_locationY" name="email" required="" lay-verify="email" autocomplete="off" class="layui-input"></div>
                         </div>
                         <div class="layui-form-item">
                             <label for="L_locationZ" class="layui-form-label">
-                                <span class="x-red">*</span>位置Z:</label>
+                                <span class="x-red">*</span>地址:</label>
                             <div class="layui-input-inline">
-                                <input type="text" id="L_locationZ" name="coordinatez" required="" lay-verify="coordinatez" autocomplete="off" class="layui-input"></div>
+                                <input type="text" id="L_locationZ" name="address" required="" lay-verify="address" autocomplete="off" class="layui-input"></div>
                         </div>
 
                 </div>
@@ -125,14 +126,10 @@
                             function(data) {
                                 console.log(data);
                                 var sensorPid=$("#select_address").val();
-                                if(sensorPid!=""){
-                                    data.field.sensorpid=sensorPid;
-                                }
-                                data.field.contentpids=1;
-                                let result=sensorServer.addLedInfo(data.field);
+                                let result=dataServer.addUserInfo(data.field);
                                 console.log(result);
                                 let msg="操作完成";
-                                if(result.data.data==1){
+                                if(result==1){
                                     msg="操作完成";
                                 }
                                 layer.alert(msg, {
