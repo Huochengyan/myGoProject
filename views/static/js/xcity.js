@@ -1,23 +1,18 @@
 ﻿$.fn.xcity = function(pName,cName,aName){
 
-    var p = $(this).find('select[lay-filter=province]');
+    this.p = $(this).find('select[lay-filter=province]');
 
-    var c = $(this).find('select[lay-filter=city]');
+    this.c = $(this).find('select[lay-filter=city]');
 
-    var a = $(this).find('select[lay-filter=area]');
+    this.a = $(this).find('select[lay-filter=area]');
 
-    var cityList = [];
+    this.cityList = [];
 
-    var areaList = [];
+    this.reaList = [];
 
-    showP(provinceList);
+    this.showP  = function(provinceList) {
 
-    showC(cityList);
-
-    showA(areaList);
-
-    function showP(provinceList) {
-        p.html('');
+        this.p.html('');
 
         is_pName = false;
         
@@ -25,71 +20,71 @@
             
             if(pName==provinceList[i].name){
                 is_pName = true;
-                cityList = provinceList[i].cityList;
-                p.append("<option selected value='"+provinceList[i].name+"'>"+provinceList[i].name+"</option>")
+                this.cityList = provinceList[i].cityList;
+                this.p.append("<option selected value='"+provinceList[i].name+"'>"+provinceList[i].name+"</option>")
             }else{
-                p.append("<option value='"+provinceList[i].name+"'>"+provinceList[i].name+"</option>")
+                this.p.append("<option value='"+provinceList[i].name+"'>"+provinceList[i].name+"</option>")
             }
         }
         if(!is_pName){
-            cityList = provinceList[0].cityList;
+            this.cityList = provinceList[0].cityList;
         }
         
     }
 
-    function showC(cityList) {
+    this.showC = function (cityList) {
 
-        c.html('');
+        this.c.html('');
 
         is_cName = false;
 
         for (var i in cityList) {
             if(cName==cityList[i].name){
                 is_cName = true;
-                areaList = cityList[i].areaList;
-                c.append("<option selected value='"+cityList[i].name+"'>"+cityList[i].name+"</option>")
+                this.areaList = cityList[i].areaList;
+                this.c.append("<option selected value='"+cityList[i].name+"'>"+cityList[i].name+"</option>")
             }else{
-                c.append("<option value='"+cityList[i].name+"'>"+cityList[i].name+"</option>")
+                this.c.append("<option value='"+cityList[i].name+"'>"+cityList[i].name+"</option>")
             }
         }
 
         if(!is_cName){
-            areaList = cityList[0].areaList;
+            this.areaList = cityList[0].areaList;
         }
     }
 
-    function showA(areaList) {
-        a.html('');
+    this.showA = function (areaList) {
+        this.a.html('');
 
         for (var i in areaList) {
             
             if(aName==areaList[i]){
-                a.append("<option selected value='"+areaList[i]+"'>"+areaList[i]+"</option>")
+                this.a.append("<option selected value='"+areaList[i]+"'>"+areaList[i]+"</option>")
             }else{
-                a.append("<option value='"+areaList[i]+"'>"+areaList[i]+"</option>")
+                this.a.append("<option value='"+areaList[i]+"'>"+areaList[i]+"</option>")
             }
         }
     }
 
+    this.showP(provinceList);
+    this.showC(this.cityList);
+    this.showA(this.areaList);
+
     form.render('select');
 
     form.on('select(province)', function(data){
-        pName = data.value;
-        showP(provinceList);
-        showC(cityList);
-        showA(areaList);
-        form.render('select');
+        var pName = data.value;
+        $(data.elem).parents(".x-city").xcity(pName);
     });
 
     form.on('select(city)', function(data){
-        cName = data.value;
-        showC(cityList);
-        showA(areaList);
-        form.render('select');
+        var cName = data.value;
+        var pName = $(data.elem).parents(".x-city").find('select[lay-filter=province]').val();
+        console.log(pName);
+        $(data.elem).parents(".x-city").xcity(pName,cName);
     });
 
-
-
+    return this;
 }
 var provinceList = [
 {name:'北京', cityList:[		   

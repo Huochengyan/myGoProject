@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>用户添加</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <link rel="stylesheet" href="./css/font.css">
+        <link rel="stylesheet" href="./css/xadmin.css">
+        <script type="text/javascript" src="./js/jquery.min.js"></script>
+        <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="./js/xadmin.js"></script>
+        <script type="text/javascript" src="./data/sensor.js"></script>
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+            <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+            <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body onload="initSelectData()">
+        <div class="layui-fluid">
+            <div class="layui-row">
+                <form class="layui-form">
+<!--                    <div class="layui-form-item">-->
+<!--                        <label for="L_deviceid" class="layui-form-label">-->
+<!--                            <span class="x-red">*</span>设备唯一编号:</label>-->
+<!--                        <div class="layui-input-inline">-->
+<!--                            <input type="text" id="L_deviceid" name="deviceid" required="" lay-verify="deviceid" autocomplete="off" class="layui-input"></div>-->
+<!--                    </div>-->
+
+                    <div class="layui-form-item">
+                        <label for="L_deviceIp" class="layui-form-label">
+                            <span class="x-red">*</span>LED设备IP:</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="L_deviceIp" name="ipaddress" required="" lay-verify="ipddress" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="select_address" class="layui-form-label">
+                            <span class="x-red">*</span>设备位置</label>
+                        <div class="layui-input-inline">
+                            <select id="select_address" style="width: 100px;height: 20px">
+                            <option value="">请选择</option>
+                        </select>
+    <!--                        <input type="text" id="L_deviceLocation" name="devicelocation" required="" lay-verify="devicelocation" autocomplete="off" class="layui-input">-->
+                    </div>
+                        <div class="layui-form-item">
+                            <label for="L_locationX" class="layui-form-label">
+                                <span class="x-red">*</span>位置X:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="L_locationX" name="coordinatex" required="" lay-verify="coordinatex" autocomplete="off" class="layui-input"></div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="L_locationY" class="layui-form-label">
+                                <span class="x-red">*</span>位置Y:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="L_locationY" name="coordinatey" required="" lay-verify="coordinatey" autocomplete="off" class="layui-input"></div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="L_locationZ" class="layui-form-label">
+                                <span class="x-red">*</span>位置Z:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="L_locationZ" name="coordinatez" required="" lay-verify="coordinatez" autocomplete="off" class="layui-input"></div>
+                        </div>
+
+                </div>
+                    <div class="layui-form-item" style="display: none;">
+                        <label for="L_contentID" class="layui-form-label">
+                            <span class="x-red">*</span>播放内容</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="L_contentID" name="contentpids" required="" lay-verify="contentpids" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+<!--                        <label for="test" class="layui-form-label"></label>-->
+                        <label  class="layui-form-label"></label>
+                        <label  class="layui-form-label"></label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button class="layui-btn" lay-filter="add"  lay-submit="">增加</button></div>
+                </form>
+
+            </div>
+        </div>
+        <script>
+            // $(function () {
+            //     initSelectData();
+            // });
+            $(document).ready(function () {
+                var dataSensor=sensorServer.getSensorList({"page":1,"rows":1000});
+                if (dataSensor!=null) {
+                    let optionList="";
+                    for(let i=0;i<dataSensor.data.length;i++){
+                        // optionList+="<option value='"+dataSensor.data[i].deviceid+"'>"+dataSensor.data[i].devicelocation+"-"+dataSensor.data[i].deviceid+"</option>";
+                        optionList+="<option value='"+dataSensor.data[i].pid+"'>"+dataSensor.data[i].devicelocation+"-"+dataSensor.data[i].deviceid+"</option>";
+                    }
+                    $("#select_address").append(optionList);
+                }
+                initSelectData();
+            });
+            function  initSelectData() {
+
+                layui.use(['form', 'layer','jquery'],
+                    function() {
+                        $ = layui.jquery;
+                        var form = layui.form,
+                            layer = layui.layer;
+
+                        //自定义验证规则
+                        form.verify({
+                            nikename: function(value) {
+                                if (value.length < 5) {
+                                    return '昵称至少得5个字符啊';
+                                }
+                            },
+                            pass: [/(.+){6,12}$/, '密码必须6到12位'],
+                            repass: function(value) {
+                                if ($('#L_pass').val() != $('#L_repass').val()) {
+                                    return '两次密码不一致';
+                                }
+                            }
+                        });
+
+                        //监听提交
+                        form.on('submit(add)',
+                            function(data) {
+                                console.log(data);
+                                var sensorPid=$("#select_address").val();
+                                if(sensorPid!=""){
+                                    data.field.sensorpid=sensorPid;
+                                }
+                                data.field.contentpids=1;
+                                let result=sensorServer.addLedInfo(data.field);
+                                console.log(result);
+                                let msg="操作完成";
+                                if(result.data.data==1){
+                                    msg="操作完成";
+                                }
+                                layer.alert(msg, {
+                                        icon: 6
+                                    },
+                                    function() {
+                                        //关闭当前frame
+                                        xadmin.close();
+                                        // 可以对父窗口进行刷新
+                                        xadmin.father_reload();
+                                    });
+                                return false;
+                            });
+
+                    });
+
+            }
+
+        </script>
+    </body>
+
+</html>
