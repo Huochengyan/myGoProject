@@ -82,4 +82,9 @@ var dataServer= {
         $.ajaxSettings.async = false;
         return dataServer.postServerData(url, postData);
     },
+    deleteUserInfo:function (postData) {
+        var url = serverUrl + "/user/delete";
+        $.ajaxSettings.async = false;
+        return dataServer.postServerData(url, postData);
+    },
 }

@@ -49,9 +49,14 @@
 </div>
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
-        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+        <button class = "layui-btn layui-btn-danger"   lay-event = "delete" > 删除</button>
+<!--        {{# if(d.status!=2){ }}-->
+<!--        <button class = "layui-btn layui-btn-sm"   lay-event = "updateWarningInfo" > 确定</button>-->
+<!--        {{# } }}-->
+<!--        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>-->
+<!--        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>-->
+<!--        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>-->
+
     </div>
 </script>
 
@@ -206,7 +211,7 @@
                     //var checkStatus = table.checkStatus(obj.config.pid);
                     switch (obj.event) {
                         case 'delete':
-                            layer.msg('data:'+obj.data.id);
+                            layer.msg('data:'+obj.data);
                             del(obj);
                             break;
                         case 'updateWarningInfo':
@@ -218,6 +223,16 @@
                     };
                 });
         });
+    }
+
+    //删除
+    function del(obj) {
+        //var params={"pids":[obj.data.pid]}
+        var params=obj.data;
+        var resultData = dataServer.deleteUserInfo(params);
+        if(resultData==1){
+            location.reload();
+        }
     }
 
 </script>

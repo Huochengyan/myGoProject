@@ -62,6 +62,7 @@ func InitRouter() (router *gin.Engine) {
 			//v1.GET("/getroles", r1.GetRoles)
 			v1.POST("/getUserList", t1.GetUserList)
 			v1.POST("/update", t1.Update)
+			v1.POST("/delete", t1.DelUser)
 		}
 
 	}

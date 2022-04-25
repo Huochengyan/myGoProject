@@ -254,7 +254,7 @@
         function del(obj) {
             //var params={"pids":[obj.data.pid]}
             var params=obj.data;
-            var resultData = sensorServer.delWarningSummary(params);
+            var resultData = dataServer.deleteUserInfo(params);
             if(resultData==1){
                 location.reload();
             }

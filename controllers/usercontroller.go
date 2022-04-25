@@ -256,3 +256,47 @@ func (m UserC) Update(g *gin.Context) {
 	return
 
 }
+
+/**
+删除用户信息
+*/
+
+func (m UserC) DelUser(g *gin.Context) {
+	rsp := new(Rsp)
+	var info models.User
+	err := g.BindJSON(&info)
+	if err != nil {
+		rsp.Msg = "json faild"
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+
+	if info.Id.String() == "" {
+		rsp.Msg = "id is empty!"
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+
+	filter := bson.D{{"_id", info.Id}}
+	//selector := bson.M{"_id": updateId}
+	//updateInfo,_ :=bson.Marshal(&info)
+	result := m.Mgo.Collection(db.User).FindOneAndDelete(context.Background(), filter)
+	if result != nil {
+		if result.Err() != nil {
+			fmt.Println(result.Err())
+		}
+		rsp.Msg = "success"
+		rsp.Code = 200
+		rsp.Data = 1
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+	rsp.Msg = "err"
+	rsp.Code = 201
+	rsp.Data = 0
+	g.JSON(http.StatusOK, rsp)
+	return
+
+}
