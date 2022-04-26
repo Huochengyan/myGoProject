@@ -25,11 +25,13 @@ var dataServer= {
             headers: {'Access-Control-Allow-Origin': '*', "token": localStorage.getItem("token")}, //请求成功的回调函数
             success: function (data) {
                 //函数参数 "data" 为请求成功服务端返回的数据
-                // if (data.code==510){
-                //     alert("重新登录！");
-                //     open("./login.html");
-                // }
                 serverResultData = data.data;
+            },error:function(XMLHttpRequest, textStatus, errorThrown, data){
+                if(XMLHttpRequest.responseJSON.code==2003){
+                    alert("超时，请重新登录！");
+                    window.location="./login.html";
+                }
+                console.log(errorThrown)    //失败的回调
             }
         });
         $.ajaxSettings.async = true;
