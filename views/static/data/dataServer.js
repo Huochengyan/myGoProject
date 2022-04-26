@@ -27,9 +27,9 @@ var dataServer= {
                 //函数参数 "data" 为请求成功服务端返回的数据
                 serverResultData = data.data;
             },error:function(XMLHttpRequest, textStatus, errorThrown, data){
-                if(XMLHttpRequest.responseJSON.code==2003){
+                if(XMLHttpRequest.responseJSON.code==2002||XMLHttpRequest.responseJSON.code==2003){
                     alert("超时，请重新登录！");
-                    window.location="./login.html";
+                    location.href='login.html';
                 }
                 console.log(errorThrown)    //失败的回调
             }
