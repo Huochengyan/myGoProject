@@ -9,7 +9,7 @@ RUN apk update \
         && update-ca-certificates 2>/dev/null || true
 
 WORKDIR /usr/mygoproject
-COPY conf ./conf/
+#COPY conf ./conf/
 #COPY resources ./resources/
 COPY mygoproject.bin .
 

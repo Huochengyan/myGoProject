@@ -2,7 +2,7 @@ package utils
 
 import (
 	"io/ioutil"
-	"myProject/log"
+	"myGoProjectNew/log"
 	"net/http"
 )
 

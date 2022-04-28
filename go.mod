@@ -12,6 +12,7 @@ require (
 	github.com/gin-contrib/cors v1.3.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/phachon/go-logger v0.0.0-20191215032019-86e4227f71ea
+	github.com/robfig/cron v1.2.0
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	go.mongodb.org/mongo-driver v1.8.4
 )

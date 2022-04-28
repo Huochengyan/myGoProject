@@ -3,8 +3,12 @@ package main
 import (
 	"fmt"
 	"github.com/go-ini/ini"
+	"github.com/robfig/cron"
 	"myGoProjectNew/myProjectUtils"
 	"myGoProjectNew/routers"
+	"myGoProjectNew/utils"
+	"runtime"
+	"time"
 )
 
 func main() {
@@ -21,11 +25,31 @@ func main() {
 
 	router := routers.InitRouter()
 	//定时器应用
-	//cronInit()
+	cronInit()
 
 	port := cfg.Section("http").Key("port").String()
 	err1 := router.Run(port)
 	if err1 != nil {
 		fmt.Println(err)
 	}
+}
+
+//定时器
+func cronInit() {
+	go func() {
+		crontab := cron.New()
+		crontab.AddFunc("* */10 * * *", myfunc) //1 分钟
+		crontab.Start()
+	}()
+}
+
+// 加个定时器
+func myfunc() {
+	fmt.Println(time.Now(), "10秒打印一次！！")
+
+	fmt.Println(runtime.NumCPU())
+	fmt.Println(utils.GetCpuPercent())
+	fmt.Println(utils.GetDiskPercent())
+	fmt.Println(utils.GetMemPercent())
+
 }
