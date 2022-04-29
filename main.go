@@ -36,8 +36,8 @@ func main() {
 		log.Error(err)
 	}
 
-	urlLocal := "http://localhost:" + port + "/myproject/"
-	log.Infoln("open", urlLocal)
+	urlLocal := "http://localhost" + port + "/myproject/"
+	fmt.Println("open", urlLocal)
 	cmd := exec.Command("explorer", urlLocal)
 	err2 := cmd.Start()
 	if err2 != nil {
