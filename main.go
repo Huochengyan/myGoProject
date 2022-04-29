@@ -58,9 +58,9 @@ func cronInit() {
 func myfunc() {
 	fmt.Println(time.Now(), "10秒打印一次！！")
 
-	fmt.Println(runtime.NumCPU())
-	fmt.Println(utils.GetCpuPercent())
-	fmt.Println(utils.GetDiskPercent())
-	fmt.Println(utils.GetMemPercent())
+	fmt.Println("CPU Number:", runtime.NumCPU())
+	fmt.Println("CPU Use:", utils.GetCpuPercent(), "%")
+	fmt.Println("Disk Use:", utils.GetDiskPercent(), "%")
+	fmt.Println("Memory user:", utils.GetMemPercent(), "%")
 
 }
