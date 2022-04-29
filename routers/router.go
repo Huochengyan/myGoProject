@@ -1,14 +1,12 @@
 package routers
 
 import (
-	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"myGoProjectNew/controllers"
 	"myGoProjectNew/db"
 	"myGoProjectNew/middleware/jwt"
 	"myGoProjectNew/routers/api"
-	"os/exec"
 )
 
 func InitRouter() (router *gin.Engine) {
@@ -31,7 +29,6 @@ func InitRouter() (router *gin.Engine) {
 	// 静态资源加载，本例为css,js以及资源图片
 	//router.Static("/myproject", "views/static")
 	router.Static("/myproject", "views/static")
-	fmt.Println("open", "http://localhost:8888/myproject/")
 	//router.Static("/myproject", "view/")
 	//router.Static("static/*")
 
@@ -94,12 +91,6 @@ func InitRouter() (router *gin.Engine) {
 	//	////test.POST("/test7", t.Test7)
 	//	//test.GET("/test8", t.GetTestAddMyql)
 	//}
-
-	cmd := exec.Command("explorer", "http://localhost:8888/myproject/")
-	err2 := cmd.Start()
-	if err2 != nil {
-		fmt.Println(err2.Error())
-	}
 
 	return
 }

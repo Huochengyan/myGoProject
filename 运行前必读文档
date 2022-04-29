@@ -1,0 +1,16 @@
+1..运行项目前先安装mongodb数据库。
+2..创建数据库mycol
+3..创建表 user
+4..添加数据
+{
+    "_id" : ObjectId("5ecd4e47b4f5038cc9951997"),
+    "username" : "123456",
+    "password" : "123456",
+    "address" : "q111",
+    "gender" : 1,
+    "email" : "41",
+    "phone" : "11",
+    "createtime" : 0
+}
+
+之后运行main.go就可以了。中间过程中提示安装包就自动安装就行了。

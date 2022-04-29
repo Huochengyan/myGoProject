@@ -7,6 +7,7 @@ import (
 	"myGoProjectNew/myProjectUtils"
 	"myGoProjectNew/routers"
 	"myGoProjectNew/utils"
+	"os/exec"
 	"runtime"
 	"time"
 )
@@ -31,6 +32,14 @@ func main() {
 	err1 := router.Run(port)
 	if err1 != nil {
 		fmt.Println(err)
+	}
+
+	urlLocal := "http://localhost:" + port + "/myproject/"
+	fmt.Println("open", urlLocal)
+	cmd := exec.Command("explorer", urlLocal)
+	err2 := cmd.Start()
+	if err2 != nil {
+		fmt.Println(err2.Error())
 	}
 }
 
