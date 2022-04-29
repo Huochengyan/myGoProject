@@ -37,7 +37,7 @@ func main() {
 	}
 
 	urlLocal := "http://localhost:" + port + "/myproject/"
-	fmt.Println("open", urlLocal)
+	log.Infoln("open", urlLocal)
 	cmd := exec.Command("explorer", urlLocal)
 	err2 := cmd.Start()
 	if err2 != nil {
