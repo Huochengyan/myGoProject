@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/go-ini/ini"
 	"github.com/robfig/cron"
+	log "github.com/sirupsen/logrus"
 	"myGoProjectNew/myProjectUtils"
 	"myGoProjectNew/routers"
 	"myGoProjectNew/utils"
@@ -32,6 +33,7 @@ func main() {
 	err1 := router.Run(port)
 	if err1 != nil {
 		fmt.Println(err)
+		log.Error(err)
 	}
 
 	urlLocal := "http://localhost:" + port + "/myproject/"
