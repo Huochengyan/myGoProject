@@ -1,0 +1,651 @@
+<!doctype html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>统计折线</title>
+        <meta name="renderer" content="webkit|ie-comp|ie-stand">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+        <link rel="stylesheet" href="./css/font.css">
+        <link rel="stylesheet" href="./css/xadmin.css">
+        <script src="./lib/layui/layui.all.js"></script>
+        <script type="text/javascript" src="lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="./js/xadmin.js"></script>
+        <script type="text/javascript" src="./js/laydate/laydate.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="data/dataServer.js"></script>
+
+
+    </head>
+    <body>
+    <div class="x-nav">
+            <span class="layui-breadcrumb">
+                <a href="">首页</a>
+                <a href="">统计页面</a>
+                <a>
+                    <cite>统计折线</cite></a>
+            </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+            <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+        </a>
+    </div>
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+
+
+                    <div class="layui-card">
+
+                        <div class="layui-card-body ">
+                                检测地点:<select id="select_address" style="width: 150px;height: 20px">
+                                             <option value="">全部</option>
+                                    </select>
+
+                                开始日期:
+                            <input  type="datetime-local" id="searchDate_start" style="height: 20px"
+                                             timeFormat="yyyy-MM-dd" />
+                            <!--     value="2018-06-12T19:30"   min="2018-06-07T00:00" max="2018-06-14T00:00"-->
+                                结束日期:<input type="datetime-local" id="searchDate_end"
+                                           name="meeting-time" style="height: 20px">
+                                显示条数:<select id="select_item" style="height: 20px">
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                            <option value="200">200</option>
+                                            <option value="300">300</option>
+                                            <option value="500">500</option>
+                                            <option value="1000">1000</option>
+                                            <option value="100000">全部</option>
+                                       </select>
+                            <button type="button" class="layui-btn"  onclick="searchChart()">查找</button>
+                            <br>
+                                 筛选气体:<select id="select_qiti" style="height: 20px" onchange="select_qitiFun()">
+                                                <option value="">全部</option>
+                                                <option value="ch4">CH4</option>
+                                                <option value="co">CO</option>
+                                                <option value="co2">CO2</option>
+                                                <option value="TEMPERATURE">T</option>
+                                                <option value="o2">O2</option>
+                                                <option value="HUMIDITY">湿度</option>
+                                           </select>
+                            <select id="select_filter" style="height: 20px">
+                                <option value=">">大于</option>
+                                <option value="=">等于</option>
+                                <option value="<">小于</option>
+                            </select>
+                            <input type="text" placeholder="输入查询的值" value="" id="qiti_val" >
+
+                        </div>
+
+                        <div class="layui-card-body ">
+                            <div id="main_ch4" style="width:1000px ;height:300px;"></div>
+                            <div id="main_co2" style="width:1000px;height:300px;"></div>
+                            <div id="main_co"  style="width:1000px;height:300px;"></div>
+                            <div id="main_t"   style="width:1000px;height:300px;"></div>
+                            <div id="main_o2"  style="width:1000px;height:300px;"></div>
+                            <div id="main_h"   style="width:1000px;height:300px;"></div>
+                            <div id="main_windspeed"   style="width:1000px;height:300px;"></div>
+                            <div id="main_noise"   style="width:1000px;height:300px;"></div>
+                            <div id="main_pm2d5"   style="width:1000px;height:300px;"></div>
+                            <div id="main_pm10"   style="width:1000px;height:300px;"></div>
+                        </div>
+                        <span style="color: #FF5722;">注：统计值负数时，表示设备掉线</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>-->
+        <script src="js/echarts.min.js"></script>
+        <script src="data/dataServer.js"></script>
+        <script type="text/javascript">
+
+            //1. 初始化地址下载列表
+            function  initSelectData() {
+                var dataSensor=sensorServer.getSensorList({"page":1,"rows":1000});
+                if (dataSensor!=null) {
+                    let optionList="";
+                    for(let i=0;i<dataSensor.data.length;i++){
+                        optionList+="<option value='"+dataSensor.data[i].deviceid+"'>"+dataSensor.data[i].devicelocation+"-"+dataSensor.data[i].deviceid+"</option>";
+                    }
+                    $("#select_address").append(optionList);
+                    return true;
+                }
+            }
+            //2. 根据条件搜索数据
+            function getDataByFilter() {
+                var deviceId="123456"; //$("#select_address").val();
+                if($("#select_address option").length>1&&deviceId=='')
+                {
+                    deviceId=$("#select_address option").eq(1).val();
+                    $("#select_address").val(deviceId);
+                }
+                var startTime=$("#searchDate_start").val();
+                var endTime=$("#searchDate_end").val();
+                if(startTime!=""){
+                    var arr=startTime.split('T');
+                    startTime=arr[0]+" "+arr[1]+":00"
+                }
+                if(endTime!=""){
+                    var arr=endTime.split('T');
+                    endTime=arr[0]+" "+arr[1]+":00"
+                }
+
+                if(startTime.substr(0,7)!=endTime.substr(0,7)){
+                    alert("不允许跨月查询数据！");
+                    return  null;
+                }
+                var pageSize=$("#select_item").val();
+                if(pageSize>10000){
+                    if(deviceId==''||startTime==''||endTime==''){
+                        alert("请选择要查询的地点和开始结束时间！");
+                        return ;
+                    }
+                    if(startTime.substr(0,10)!=endTime.substr(0,10))
+                    {
+                        alert("原始数据数据量太大，无法跨天生成曲线，建议选择一天内具体地点，具体时间段来查询");
+                        return ;
+                    }
+                }
+                var page=1;
+                var pageSize=pageSize;
+                if(deviceId=="") {
+                    alert("请选择要查询得地点！");
+                    return;
+                }
+                var resultData=dataServer.getPcResourceList({"page":page,"rows":pageSize,"deviceId":deviceId,
+                    "startTime":startTime,
+                    "endTime":endTime});
+                //气体条件
+                 let qiti=$("#select_qiti").val();
+                 if(qiti!=""){
+                     let qiti_Filter=$("#select_filter").val();
+                     let qiti_Val=$("#qiti_val").val();
+
+                     if(qiti_Val=="0"||qiti_Val=="")
+                     {
+                         alert("请输入您要指定搜索的气体值！");
+                         $("#qiti_val").focus();
+                         return null;
+                     }
+                     if(deviceId=="") {
+                         layer.msg("请选择要查询得地点！");
+                         return;
+                     }
+                     resultData=dataServer.getPcResourceList({"page":page,"rows":pageSize,"deviceId":deviceId,
+                         "qiti":qiti,
+                         "filter":qiti_Filter,
+                         "filterVal":qiti_Val,
+                         "startTime":startTime,
+                         "endTime":endTime});
+                 }
+                //
+
+
+                return resultData;
+            }
+
+
+            function  initDataInfo(titleText,xList,yList) {
+                // 绑定数据逻辑
+                var base = +new Date(1968, 9, 3);
+                var oneDay = 24 * 3600 * 1000;
+                var date = [];
+
+                var data = [Math.random() * 300];
+
+                for (var i = 1; i < 20000; i++) {
+                    var now = new Date(base += oneDay);
+                    date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/')); //x 集合
+                    data.push(Math.round((Math.random() - 0.5) * 20 + data[i - 1]));             //y 集合
+                }
+                if(xList!=null&&yList!=null) {
+                    date = xList;
+                    data = yList;
+                }
+                option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        position: function (pt) {
+                            return [pt[0], '10%'];
+                        }
+                    },
+                    title: {
+                        left: 'center',
+                        text: titleText,  //'大数据量面积图',
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            }, //区域缩放，区域缩放还原
+                            dataView: {
+                                readOnly: false
+                            }, //数据视图
+                            magicType: {
+                                type: ['line', 'bar']
+                            },  //切换为折线图，切换为柱状图
+                            restore: {},  //还原
+                            saveAsImage: {}   //保存为图片
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: date
+                    },
+                    yAxis: {
+                        type: 'value',
+                        boundaryGap: [0, '100%']
+                    },
+                    dataZoom: [{
+                        type: 'inside',
+                        start: 90,
+                        end: 100
+                    }, {
+                        start: 90,
+                        end: 100,
+                        handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+                        handleSize: '80%',
+                        handleStyle: {
+                            color: '#fff',
+                            shadowBlur: 3,
+                            shadowColor: 'rgba(0, 0, 0, 0.6)',
+                            shadowOffsetX: 2,
+                            shadowOffsetY: 2
+                        }
+                    }],
+                    series: [
+                        {
+                            name:  titleText, //'模拟数据',
+                            type: 'line',
+                            smooth: true,
+                            symbol: 'none',
+                            sampling: 'average',
+                            itemStyle: {
+                                color: 'rgb(255, 70, 131)'
+                            },
+                            areaStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                    offset: 0,
+                                    color: 'rgb(255, 158, 68)'
+                                }, {
+                                    offset: 1,
+                                    color: 'rgb(255, 70, 131)'
+                                }])
+                            },
+                            data: data
+                        }
+                    ]
+                };
+            }
+
+
+            $(function () {
+                //initSelectData();//初始化选择列表
+                // var resultData=getDataByFilter();
+                //
+                // var date = [resultData.data.length];
+                // var data = [resultData.data.length];
+                // for (var i = 0; i < resultData.data.length; i++) {
+                //     date.push(resultData.data[i].uploadtime);
+                //     data.push(resultData.data[i].co);
+                // }
+                // initDataInfo(date,data);
+                console.log("加载初始化数据！");
+                // let result=initSelectData();//初始化选择列表
+                // if(result){
+                //     searchChart();
+                // }
+                searchChart();
+            });
+
+           // initDataInfo(null,null);
+
+
+
+
+            function searchChart() {
+                var resultData=getDataByFilter();
+                layer.msg("结果条数："+resultData.data.length);
+                drawCPU(resultData);
+                drawDisk(resultData);
+                // drawCO2(resultData);
+                // drawT(resultData);
+                // drawH(resultData);
+                // drawO2(resultData);
+                // drawWindSpeed(resultData);
+                // drawNoise(resultData);
+                // drawPM2D5(resultData);
+                // drawPM10(resultData);
+            }
+            function  drawCPU(resultData){
+                var date = [];
+                var data = [];
+                for (var i = 0; i < resultData.data.length; i++) {
+                    let timeInfo=getHMS(resultData.data[i].crateTime); //new Date(resultData.data[i].crateTime).Format('yyyy-MM-dd hh:mm:ss')
+                    date.push(timeInfo);
+                    data.push(resultData.data[i].cpuPercent);
+                }
+                initDataInfo("CPU使用%",date,data);
+
+
+                // 创建 echarts 实例。
+                var dom = document.getElementById('main_co');
+                var chart = echarts.init(dom);
+                // 调用 setOption 将 option 输入 echarts，然后 echarts 渲染图表。
+                chart.setOption(option);
+
+
+                chart.on('dataZoom',function(event){
+                    if(event.batch){
+                        start=event.batch[0].start;
+                        end=event.batch[0].end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    }else{
+                        start=event.start;
+                        end=event.end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    };});
+            }
+            function  drawDisk(resultData){
+
+                var date = [];
+                var data = [];
+                for (var i = 0; i < resultData.data.length; i++) {
+                    date.push(getHMS(resultData.data[i].crateTime));
+                    data.push(resultData.data[i].diskPercent);
+                }
+                initDataInfo("磁盘使用%",date,data);
+
+
+                // 创建 echarts 实例。
+                var dom = document.getElementById('main_ch4');
+                var chart = echarts.init(dom);
+                // 调用 setOption 将 option 输入 echarts，然后 echarts 渲染图表。
+                chart.setOption(option);
+
+                chart.on('dataZoom',function(event){
+                    if(event.batch){
+                        start=event.batch[0].start;
+                        end=event.batch[0].end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    }else{
+                        start=event.start;
+                        end=event.end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    };});
+
+            }
+            function  drawCO2(resultData){
+
+                var date = [];
+                var data = [];
+                for (var i = 0; i < resultData.data.length; i++) {
+                    date.push(resultData.data[i].uploadtime);
+                    data.push(resultData.data[i].co2);
+                }
+                initDataInfo("二氧化碳%",date,data);
+
+
+                // 创建 echarts 实例。
+                var dom = document.getElementById('main_co2');
+                var chart = echarts.init(dom);
+                // 调用 setOption 将 option 输入 echarts，然后 echarts 渲染图表。
+                chart.setOption(option);
+
+                chart.on('dataZoom',function(event){
+                    if(event.batch){
+                        start=event.batch[0].start;
+                        end=event.batch[0].end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    }else{
+                        start=event.start;
+                        end=event.end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    };});
+
+            }
+            function  drawT(resultData){
+
+                var date = [];
+                var data = [];
+                for (var i = 0; i < resultData.data.length; i++) {
+                    date.push(resultData.data[i].uploadtime);
+                    data.push(resultData.data[i].temperature);
+                }
+                initDataInfo("温度℃",date,data);
+
+
+                // 创建 echarts 实例。
+                var dom = document.getElementById('main_t');
+                var chart = echarts.init(dom);
+                // 调用 setOption 将 option 输入 echarts，然后 echarts 渲染图表。
+                chart.setOption(option);
+
+                chart.on('dataZoom',function(event){
+                    if(event.batch){
+                        start=event.batch[0].start;
+                        end=event.batch[0].end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    }else{
+                        start=event.start;
+                        end=event.end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    };});
+
+            }
+            function  drawH(resultData){
+
+                var date = [];
+                var data = [];
+                for (var i = 0; i < resultData.data.length; i++) {
+                    date.push(resultData.data[i].uploadtime);
+                    data.push(resultData.data[i].humidity);
+                }
+                initDataInfo("湿度%",date,data);
+
+
+                // 创建 echarts 实例。
+                var dom = document.getElementById('main_h');
+                var chart = echarts.init(dom);
+                // 调用 setOption 将 option 输入 echarts，然后 echarts 渲染图表。
+                chart.setOption(option);
+
+                chart.on('dataZoom',function(event){
+                    if(event.batch){
+                        start=event.batch[0].start;
+                        end=event.batch[0].end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    }else{
+                        start=event.start;
+                        end=event.end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    };});
+
+            }
+            function  drawO2(resultData){
+
+                var date = [];
+                var data = [];
+                for (var i = 0; i < resultData.data.length; i++) {
+                    date.push(resultData.data[i].uploadtime);
+                    data.push(resultData.data[i].o2);
+                }
+                initDataInfo("氧气%",date,data);
+
+
+                // 创建 echarts 实例。
+                var dom = document.getElementById('main_o2');
+                var chart = echarts.init(dom);
+                // 调用 setOption 将 option 输入 echarts，然后 echarts 渲染图表。
+                chart.setOption(option);
+
+                chart.on('dataZoom',function(event){
+                    if(event.batch){
+                        start=event.batch[0].start;
+                        end=event.batch[0].end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    }else{
+                        start=event.start;
+                        end=event.end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    };});
+
+            }
+
+            function drawWindSpeed(resultData){
+
+                var date = [];
+                var data = [];
+                for (var i = 0; i < resultData.data.length; i++) {
+                    date.push(resultData.data[i].uploadtime);
+                    data.push(resultData.data[i].windSpeed);
+                }
+                initDataInfo("风速(m/s)",date,data);
+
+
+                // 创建 echarts 实例。
+                var dom = document.getElementById('main_windspeed');
+                var chart = echarts.init(dom);
+                // 调用 setOption 将 option 输入 echarts，然后 echarts 渲染图表。
+                chart.setOption(option);
+
+                chart.on('dataZoom',function(event){
+                    if(event.batch){
+                        start=event.batch[0].start;
+                        end=event.batch[0].end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    }else{
+                        start=event.start;
+                        end=event.end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    };});
+
+            }
+
+            function  drawNoise(resultData){
+
+                var date = [];
+                var data = [];
+                for (var i = 0; i < resultData.data.length; i++) {
+                    date.push(resultData.data[i].uploadtime);
+                    data.push(resultData.data[i].noise);
+                }
+                initDataInfo("噪音dB",date,data);
+
+
+                // 创建 echarts 实例。
+                var dom = document.getElementById('main_noise');
+                var chart = echarts.init(dom);
+                // 调用 setOption 将 option 输入 echarts，然后 echarts 渲染图表。
+                chart.setOption(option);
+
+                chart.on('dataZoom',function(event){
+                    if(event.batch){
+                        start=event.batch[0].start;
+                        end=event.batch[0].end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    }else{
+                        start=event.start;
+                        end=event.end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    };});
+
+            }
+
+            function drawPM2D5(resultData) {
+                var date = [];
+                var data = [];
+                for (var i = 0; i < resultData.data.length; i++) {
+                    date.push(resultData.data[i].uploadtime);
+                    data.push(resultData.data[i].pm2d5);
+                }
+                initDataInfo("PM2.5(ug/m3)",date,data);
+
+                // 创建 echarts 实例。
+                var dom = document.getElementById('main_pm2d5');
+                var chart = echarts.init(dom);
+                // 调用 setOption 将 option 输入 echarts，然后 echarts 渲染图表。
+                chart.setOption(option);
+
+                chart.on('dataZoom',function(event){
+                    if(event.batch){
+                        start=event.batch[0].start;
+                        end=event.batch[0].end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    }else{
+                        start=event.start;
+                        end=event.end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    };});
+
+            }
+            function drawPM10(resultData) {
+                var date = [];
+                var data = [];
+                for (var i = 0; i < resultData.data.length; i++) {
+                    date.push(resultData.data[i].uploadtime);
+                    data.push(resultData.data[i].pm10);
+                }
+                initDataInfo("PM10(ug/m3)",date,data);
+
+                // 创建 echarts 实例。
+                var dom = document.getElementById('main_pm10');
+                var chart = echarts.init(dom);
+                // 调用 setOption 将 option 输入 echarts，然后 echarts 渲染图表。
+                chart.setOption(option);
+
+                chart.on('dataZoom',function(event){
+                    if(event.batch){
+                        start=event.batch[0].start;
+                        end=event.batch[0].end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    }else{
+                        start=event.start;
+                        end=event.end;
+                        console.log('start'+start);
+                        console.log('end'+end);
+                    };});
+
+            }
+            function select_qitiFun() {
+                $("#qiti_val").val(0.0);
+            }
+
+            //时间戳转时间  年/月/日 时:分:秒
+            function getHMS (timestamp) {
+                var date = new Date(timestamp*1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                var Y = date.getFullYear() + '/';
+                var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '/';
+                var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
+
+                var h = (date.getHours() < 10 ? '0' + (date.getHours()) : date.getHours()) + ':';
+                var m = (date.getMinutes() < 10 ? '0' + (date.getMinutes()) : date.getMinutes()) + ':';
+                var s = (date.getSeconds() < 10 ? '0' + (date.getSeconds()) : date.getSeconds());
+                return Y + M + D + h + m + s;
+            }
+
+        </script>
+    </body>
+</html>

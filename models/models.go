@@ -23,3 +23,12 @@ type UserList struct {
 	Total int64       `json:"total"`
 	Data  interface{} `json:"data"`
 }
+
+type PcResource struct {
+	Id primitive.ObjectID `bson:"_id"`
+	//硬盘使用 百分比
+	DiskPercent float64 `json:"diskPercent"`
+	//CPU使用 百分比
+	CpuPercent float64 `json:"cpuPercent"`
+	CreateTime int64   `json:"crateTime"`
+}

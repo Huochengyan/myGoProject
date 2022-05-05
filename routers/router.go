@@ -65,6 +65,14 @@ func InitRouter() (router *gin.Engine) {
 		}
 
 	}
+
+	pcinfo := router.Group("pcinfo")
+	{
+		pcinfo.Use(jwt.JWT())
+		{
+			pcinfo.POST("getPcResourceList", t1.GetPcResourceList)
+		}
+	}
 	//v2 := router.Group("/file")
 	//{
 	//	v2.POST("/uploadfile", controllers.Uploadfile)
