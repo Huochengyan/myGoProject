@@ -1,8 +1,8 @@
 package utils
 
 import (
+	log "github.com/sirupsen/logrus"
 	"io/ioutil"
-	"myGoProjectNew/log"
 	"net/http"
 )
 

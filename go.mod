@@ -14,6 +14,7 @@ require (
 	github.com/phachon/go-logger v0.0.0-20191215032019-86e4227f71ea
 	github.com/robfig/cron v1.2.0
 	github.com/shirou/gopsutil v3.21.11+incompatible
+	github.com/sirupsen/logrus v1.4.2
 	go.mongodb.org/mongo-driver v1.8.4
 )
 
@@ -29,6 +30,7 @@ require (
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
+	github.com/konsorten/go-windows-terminal-sequences v1.0.1 // indirect
 	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/mailru/easyjson v0.7.0 // indirect
 	github.com/mattn/go-colorable v0.1.4 // indirect

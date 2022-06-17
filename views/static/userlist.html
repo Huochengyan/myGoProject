@@ -26,9 +26,9 @@
 <div class="x-nav">
             <span class="layui-breadcrumb">
                 <a href="">首页</a>
-                <a href="">LED管理</a>
+                <a href="">数据管理</a>
                 <a>
-                    <cite>LED设备信息管理</cite></a>
+                    <cite>用户信息管理</cite></a>
             </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        onclick="location.reload()" title="刷新">
@@ -207,11 +207,9 @@
                     console.log(data.Id);
                     var jsonResult = dataServer.updateUserInfo(obj.data);
                     if (jsonResult == 1) {
-                        layer.alert("更新成功", {icon: 6}, function () {
-                            x_admin_father_reload();
-                        });
-                    } else {
                         layer.msg("更新成功！");
+                    } else {
+                        layer.msg("更新失败！");
                     }
                 });
 

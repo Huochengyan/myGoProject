@@ -100,4 +100,10 @@ var dataServer= {
         $.ajaxSettings.async = false;
         return dataServer.postServerData(url, postData);
     },
+    getPcResourceList:function (postData) {
+        var url = serverUrl + "/pcinfo/getPcResourceList";
+        $.ajaxSettings.async = false;
+        return dataServer.postServerData(url, postData);
+    },
+
 }
