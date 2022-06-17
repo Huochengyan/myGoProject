@@ -2,21 +2,42 @@ package routers
 
 import (
 	"fmt"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"myGoProjectNew/controllers"
 	"myGoProjectNew/db"
 	"myGoProjectNew/middleware/jwt"
 	"myGoProjectNew/routers/api"
+	"net/http"
 	"os/exec"
 )
 
+func Cors() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		method := c.Request.Method
+
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Headers", "Content-Type,AccessToken,X-CSRF-Token, Authorization, Token")
+		c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+		c.Header("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type")
+		c.Header("Access-Control-Allow-Credentials", "true")
+
+		//放行所有OPTIONS方法
+		if method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusNoContent)
+		}
+		// 处理请求
+		c.Next()
+	}
+}
+
 func InitRouter() (router *gin.Engine) {
 	router = gin.Default() //gin.New() //
-	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
-	router.Use(cors.New(config))
+	//config := cors.DefaultConfig()
+	//config.AllowAllOrigins = true
+	//router.Use(cors.New(config))
 
+	//跨域
+	router.Use(Cors())
 	//拦截所有请求 打印下
 	//router.Use(middleware())
 
@@ -42,12 +63,12 @@ func InitRouter() (router *gin.Engine) {
 	//})
 
 	/* 获得授权Token */
-	router.GET("/auth", api.GetAuth)
+	router.GET("/v1/auth", api.GetAuth)
 
 	t1 := controllers.UserC{Mgo: db.InitMongoDB2()}
 	//r1 := controllers.RoleC{Mgo: db.InitMongoDB2()}
 	//use mongo db
-	v1 := router.Group("/user/")
+	v1 := router.Group("/v1/user/")
 	{
 		v1.POST("/login", t1.Login)
 		v1.Use(jwt.JWT())

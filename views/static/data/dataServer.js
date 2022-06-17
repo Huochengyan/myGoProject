@@ -3,7 +3,7 @@ function methodInfo(methodName,data){
     this.data=data
 }
 let serverOrigin=window.location.origin;
-let serverUrl=serverOrigin+'';
+let serverUrl=serverOrigin+'/v1';
 let code_success=200;
 var dataServer= {
     //向服务器法送数据
@@ -60,6 +60,12 @@ var dataServer= {
         });
         // $.ajaxSettings.async = true;
         return serverResultData;
+    },
+    // 获取所有用户 getAllUser
+    login: function (postData) {
+        var url = serverUrl + "/user/login";
+        $.ajaxSettings.async = false;
+        return dataServer.postServerData(url, postData);
     },
     //获取传感器数据 list
     getSensorList: function (postData) {

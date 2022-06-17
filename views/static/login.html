@@ -113,34 +113,46 @@
             });
         })
         function  login() {
-            debugger;
+
             var formData = new FormData();
             formData.append("username",$('input[name="username"]').val())
             formData.append("password",$('input[name="password"]').val())
-            $.ajax({
-                url:location.origin+"/user/login",
-                type:'POST',
-                data:formData,
-                processData: false,
-                contentType: false,
-                dataType:'json',
-                success:function(data){
-                    debugger;
-                    console.log(data)
-                    if(data.code==200) {
-                        debugger;
-                        localStorage.setItem("token",data.data.Token)
-                        location.href = 'index.html'
-                        localStorage.setItem("myproject_username",$('input[name="username"]').val())
-                        localStorage.setItem("myproject_password",$('input[name="password"]').val())
-                    }else{
-                        alert(data.msg) //提示错误！！
-                    }
-                },error:function(XMLHttpRequest, textStatus, errorThrown, data){
-                    alert(XMLHttpRequest.responseJSON);
-                    console.log(errorThrown)    //失败的回调
-                }
-            });
+            let params={};
+            let result=dataServer.login({"username":$('input[name="username"]').val(),"password":$('input[name="password"]').val()});
+            if(result!=null){
+                localStorage.setItem("token",result.Token);
+                location.href = 'index.html';
+                localStorage.setItem("myproject_username",$('input[name="username"]').val());
+                localStorage.setItem("myproject_password",$('input[name="password"]').val());
+            }else{
+                alert("user or password is error.")
+            }
+
+
+            // $.ajax({
+            //     url:location.origin+"/user/login",
+            //     type:'POST',
+            //     data:formData,
+            //     processData: false,
+            //     contentType: false,
+            //     dataType:'json',
+            //     success:function(data){
+            //         debugger;
+            //         console.log(data)
+            //         if(data.code==200) {
+            //             debugger;
+            //             localStorage.setItem("token",data.data.Token)
+            //             location.href = 'index.html'
+            //             localStorage.setItem("myproject_username",$('input[name="username"]').val())
+            //             localStorage.setItem("myproject_password",$('input[name="password"]').val())
+            //         }else{
+            //             alert(data.msg) //提示错误！！
+            //         }
+            //     },error:function(XMLHttpRequest, textStatus, errorThrown, data){
+            //         alert(XMLHttpRequest.responseJSON);
+            //         console.log(errorThrown)    //失败的回调
+            //     }
+            // });
         }
     </script>
     <span style="position:fixed; bottom:0; left:0; color: white;">GoAdmin &nbsp;V1.0.0.0</span>

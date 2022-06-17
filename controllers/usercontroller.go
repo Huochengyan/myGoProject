@@ -25,9 +25,19 @@ type UserC struct {
 func (m UserC) Login(g *gin.Context) {
 	fmt.Println("login.........")
 	rsp := new(Rsp)
-	name := g.PostForm("username")
-	pass := g.PostForm("password")
+	//name := g.PostForm("username")
+	//pass := g.PostForm("password")
 
+	var info models.User
+	err := g.BindJSON(&info)
+	if err != nil {
+		rsp.Msg = "json faild"
+		rsp.Code = 201
+		g.JSON(http.StatusOK, rsp)
+		return
+	}
+	name := info.Username
+	pass := info.Password
 	//var gerr *gvalid.Error
 	//gerr = gvalid.Check(g.PostForm("username"), "required", nil)
 	//if gerr != nil {
@@ -46,7 +56,7 @@ func (m UserC) Login(g *gin.Context) {
 	//	return
 	//}
 
-	findfilter := bson.D{{"username", g.PostForm("username")}, {"password", g.PostForm("password")}}
+	findfilter := bson.D{{"username", name}, {"password", pass}}
 	cur, err := m.Mgo.Collection(db.User).Find(context.Background(), findfilter)
 	if err != nil {
 		rsp.Msg = "faild"
