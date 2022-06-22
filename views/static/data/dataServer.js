@@ -29,7 +29,9 @@ var dataServer= {
             },error:function(XMLHttpRequest, textStatus, errorThrown, data){
                 if(XMLHttpRequest.responseJSON.code==2002||XMLHttpRequest.responseJSON.code==2003){
                     alert("超时，请重新登录！");
-                    location.href='login.html';
+                    //location.href='login.html'; //tab页内代开
+                    //top.location.href ="login.html"; //这种可以新页打开
+                    window.parent.location.replace("login.html");//刷新父级页面; 这种可以新页打开
                 }
                 console.log(errorThrown)    //失败的回调
             }
