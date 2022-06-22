@@ -79,35 +79,36 @@
                 //   });
                 //监听提交
                 form.on('submit(login)', function(data){
-                    let md5pas=MD5(data.field.password);
-
-                    var formData = new FormData();
-                    formData.append("username",data.field.username);
-                    formData.append("password",data.field.password);
-                    $.ajax({
-                        url:location.origin+"/user/login",
-                        type:'POST',
-                        data:formData,
-                        processData: false,
-                        contentType: false,
-                        dataType:'json',
-                        success:function(data){
-                            debugger;
-                            console.log(data)
-                            if(data.code==200) {
-                                debugger;
-                                localStorage.setItem("token",data.data.Token)
-                                location.href = 'index.html'
-                                localStorage.setItem("myproject_username",$('input[name="username"]').val())
-                                localStorage.setItem("myproject_password",$('input[name="password"]').val())
-                            }else{
-                                alert(data.msg) //提示错误！！
-                            }
-                        },error:function(XMLHttpRequest, textStatus, errorThrown, data){
-                            alert(XMLHttpRequest.responseJSON);
-                            console.log(errorThrown)    //失败的回调
-                        }
-                    });
+                    login();
+                    // let md5pas=MD5(data.field.password);
+                    //
+                    // var formData = new FormData();
+                    // formData.append("username",data.field.username);
+                    // formData.append("password",data.field.password);
+                    // $.ajax({
+                    //     url:location.origin+"/user/login",
+                    //     type:'POST',
+                    //     data:formData,
+                    //     processData: false,
+                    //     contentType: false,
+                    //     dataType:'json',
+                    //     success:function(data){
+                    //         debugger;
+                    //         console.log(data)
+                    //         if(data.code==200) {
+                    //             debugger;
+                    //             localStorage.setItem("token",data.data.Token)
+                    //             location.href = 'index.html'
+                    //             localStorage.setItem("myproject_username",$('input[name="username"]').val())
+                    //             localStorage.setItem("myproject_password",$('input[name="password"]').val())
+                    //         }else{
+                    //             alert(data.msg) //提示错误！！
+                    //         }
+                    //     },error:function(XMLHttpRequest, textStatus, errorThrown, data){
+                    //         console.log(XMLHttpRequest.responseJSON);
+                    //         console.log(errorThrown)    //失败的回调
+                    //     }
+                    // });
                     return false;
                 });
             });
