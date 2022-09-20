@@ -166,7 +166,7 @@
                 //page:false
                 , cols: [[ //表头
                     {field: 'Id', title: '编号', width: 80, sort: true, fixed: 'left'}
-                    , {field: 'username', title: '用户名', edit: 'text'}
+                    , {field: 'username', title: '用户名', width: 80,edit: 'text'}
                     , {field: 'gender', title: '性别', width: 80, edit: 'text'}
                     , {field: 'password', title: '密码', width: 80, edit: 'text'}
                     , {field: 'address', title: '地址', width: 80, edit: 'text'}
@@ -185,6 +185,17 @@
                             $(this).text("已处理")
                         }
                     });
+                    $("[data-field='gender']").children().each(function () {
+                        if ($(this).text() ==0) {
+                            $(this).text("👩");
+                        }else if ($(this).text() ==1) {
+                            $(this).text("👨");
+                        }else {
+                            $(this).text("无");
+                        }
+                    });
+
+
                 },
                 parseData: function (res) {
                     return {

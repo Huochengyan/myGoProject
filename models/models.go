@@ -11,6 +11,7 @@ type User struct {
 	Gender     int                `json:"gender"`
 	Email      string             `json:"email"`
 	Phone      string             `json:"phone"`
+	Status     string             `json:"status"`
 	CreateTime int64              `json:"crateTime"`
 }
 

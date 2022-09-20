@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>发货记录</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<!--        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />-->
+        <link rel="stylesheet" href="./css/font.css">
+        <link rel="stylesheet" href="./css/xadmin.css">
+        <script src="./lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="./js/xadmin.js"></script>
+        <script type="text/javascript" src="./js/jquery.min.js"></script>
+        <script src="data/dataServer.js"></script>
+        <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+
+    <body>
+        <div class="x-nav">
+            <span class="layui-breadcrumb">
+                <a href="">首页</a>
+                <a href="">发货记录</a>
+                <a>
+                    <cite>发货记录</cite></a>
+            </span>
+            <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+                <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+            </a>
+        </div>
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+<!--                        <div class="layui-card-body ">-->
+<!--                            <form class="layui-form layui-col-space5">-->
+<!--                                <div class="layui-inline layui-show-xs-block">-->
+<!--                                    <input class="layui-input" autocomplete="off" placeholder="开始日" name="start" id="start"></div>-->
+<!--                                <div class="layui-inline layui-show-xs-block">-->
+<!--                                    <input class="layui-input" autocomplete="off" placeholder="截止日" name="end" id="end"></div>-->
+<!--                                <div class="layui-inline layui-show-xs-block">-->
+<!--                                    <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input"></div>-->
+<!--                                <div class="layui-inline layui-show-xs-block">-->
+<!--                                    <button class="layui-btn" lay-submit="" lay-filter="sreach">-->
+<!--                                        <i class="layui-icon">&#xe615;</i></button>-->
+<!--                                </div>-->
+<!--                            </form>-->
+<!--                        </div>-->
+                        <div class="layui-card-body ">
+<!--                            <table class="layui-table" lay-data="{url:'./user.json',page:true,toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">-->
+<!--                                <thead>-->
+<!--                                    <tr>-->
+<!--                                        <th lay-data="{type:'checkbox'}">ID</th>-->
+<!--                                        <th lay-data="{field:'pid', width:80, sort: true}">ID</th>-->
+<!--                                        <th lay-data="{field:'deviceId', width:120, sort: true, edit: 'text'}">设备标识</th>-->
+<!--                                        <th lay-data="{field:'deviceIp', edit: 'text', minWidth: 150}">设备IP</th>-->
+<!--                                        <th lay-data="{field:'deviceLocation', width:80,templet: '#switchTpl'}">位置信息</th>-->
+<!--                                        <th lay-data="{field:'city', edit: 'text', minWidth: 100}">城市</th>-->
+<!--                                        <th lay-data="{field:'experience', sort: true, edit: 'text'}">积分</th>-->
+<!--                                        <th lay-data="{field:'dw_xinzhi',templet: function(d){ return d.dw_xinzhi.titel;}}">学校</th></tr>-->
+<!--                                </thead>-->
+<!--                            </table>-->
+                            地点: <select id="select_address" style="width: 100px;height: 20px">
+                                    <option value="0">请选择</option>
+                            </select>
+                            <div class="layui-inline layui-show-xs-block">
+                                <button class="layui-btn" lay-submit="" lay-filter="sreach" onclick="searchInfo()">
+                                    <i class="layui-icon">&#xe615;</i></button>
+                            </div>
+<!--                            <a  onclick="showDetailsByMin()" style="color: #00a0e9; text-decoration:underline;"> 查看详细</a>-->
+                            <table id="demo" class="layui-table" lay-filter="test_table" ></table>
+                            <div id="test1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="box1" style="width:600px;height:400px;display: none">
+            <div id="showUploadFile">
+                <input type="file" id="file_1" accept="image/jpg, image/png, image/jpeg, image/gif" >
+                <button type="button" class="layui-btn" id="saveFile" onclick="saveFileInfo()"><i class="layui-icon"></i>上传</button>
+            </div>
+            <div id="showFileListInfo"></div>
+        </div>
+    </body>
+    <script type="text/html" id="toolbarMenu">
+        <div class = "layui-btn-container"  id="tableMenu">
+            <!--            <button class = "layui-btn layui-btn-sm" lay-event = "getCheckData" > 获取选中行数据 </button>-->
+            <!--            <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button >-->
+            <button class = "layui-btn layui-btn-sm" lay-event = "addSensor" onclick="xadmin.open('添加记录','./ai_deliverRecord_AddOrEdit.html?id=-1',600,400)" ><i class="layui-icon"></i> 添加记录</button>
+            <!--            <button class = "layui-btn layui-btn-danger" lay-event = "delCheckData" > <i class="layui-icon"></i>删除选中 </button>-->
+<!--            <button type="button" class="layui-btn" id="test3"><i class="layui-icon"></i>上传文件</button>-->
+
+        </div >
+    </script>
+    <script type="text/html" id="toolbarDemo">
+        <div class = "layui-btn-container" >
+            <button class = "layui-btn layui-btn-sm" lay-event = "getCheckData" > 获取选中行数据 </button>
+            <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button >
+<!--            <button class = "layui-btn layui-btn-sm" lay-event = "isAll" > 验证是否全选</button>-->
+<!--            <button class = "layui-btn layui-btn-danger"   lay-event = "delete" > 删除</button>-->
+<!--            {{# if(d.attachmentList.length>0){ }}-->
+<!--                 <button class = "layui-btn layui-btn-sm"   lay-event = "updateWarningInfo" > 确定</button>-->
+<!--            {{# } }}-->
+
+            {{# if(d.status==""){}}
+                <i class="layui-icon layui-icon-edit"    lay-event = "edit" >&nbsp;&nbsp;</i>
+                <i class="layui-icon layui-icon-delete"  lay-event = "delete" >&nbsp;&nbsp;</i>
+                <i class="layui-icon layui-icon-upload"  lay-event = "uploadFile" >&nbsp;&nbsp;</i>
+                <button  class="layui-btn  layui-btn-normal" lay-event = "lockData" >🔒</button>
+            {{# } else{}}
+                 <i class="layui-icon"  lay-event = "" onclick="layer.msg('已锁定！')">🔒</i>
+            {{# } }}
+
+<!--            {{# if(d.attachmentList.length>0){ }}-->
+<!--                <i class="layui-icon layui-icon-carousel"  lay-event = "showPic" >&nbsp;&nbsp;</i>-->
+<!--            {{# } }}-->
+<!--            <button type="button" class="layui-btn"><i class="layui-icon"></i></button>-->
+<!--            <img src="images/att.png" style="width: 15px; height: 15px;" lay-enent="uploadFile">-->
+        </div >
+    </script>
+
+    <script type="text/javascript">
+
+        // setInterval(function(){
+        //    // initData();
+        // },1000);
+        function showDetailsByMin(){
+            xadmin.open('详细信息','warningList.html');
+        }
+
+        $(function () {
+             initSelectData();
+             searchInfo();
+        });
+
+        function searchInfo(){
+            initData();
+        }
+        function  initSelectData() {
+            // var dataSensor=sensorServer.getMinesList({"page":1,"rows":1000});
+            // if (dataSensor!=null) {
+            //     let optionList="";
+            //     for(let i=0;i<dataSensor.data.length;i++){
+            //         optionList+="<option value='"+dataSensor.data[i].id+"'>"+dataSensor.data[i].mineName+"</option>";
+            //     }
+            //     $("#select_address").append(optionList);
+            // }
+        }
+        //请求数据
+        function getData(page,limit) {
+            var resultData;
+            let minesId=$("#select_address").val();
+            var params={"page":page,"rows":limit,"minesId":minesId}
+            resultData = dataServer.getUserList(params);
+            return resultData;
+        }
+
+        function saveFileInfo() {
+            let formData = new FormData();
+            if(document.getElementById('file_1').files.length==0)
+            {
+                alert("请选择要上传的文件！！");
+                return;
+            }
+            formData.append("file", document.getElementById('file_1').files[0]);
+            let url=sensorServer.getUploadFileUrl();
+            $.ajax({
+                url:url,
+                type:"post",
+                data:formData,
+                processData:false,
+                contentType:false,
+                success:function(data){
+                    console.log(JSON.stringify(data));
+                    debugger;
+                    if(data.msg=="操作成功"&&data.data!=null){
+                        let uploadSuccessPath=data.data;
+                        if(uploadSuccessPath!="") {
+                            let fileName=document.getElementById('file_1').files[0].name;
+                            let serverUrl=data.data;
+                            let params={"fileUrl":serverUrl,"fileName":fileName,"deliverRecordId":uploadDeliverRecordId};
+                            let result=sensorServer.saveDeliverRecordAttachment(params);
+                            if(result==1)
+                               layer.msg("上传成功！");
+                            else
+                               layer.msg("操作失败！");
+                        }else{
+                            layer.msg("保存失败！");
+                        }
+                    }else{
+                        alert(JSON.stringify(data));
+                        layer.msg("上传失败！");
+                    }
+                },
+                error:function(e){
+                    alert("错误！！");
+
+                }
+            });
+        }
+        let uploadDeliverRecordId=0;
+        function refData(dataList){
+            debugger;
+            //var dataList=dataArraygetData(page,limit).data;
+            layui.use('table', function () {
+                var table = layui.table;
+                //第一个实例
+                table.render({
+                    elem: '#demo'
+                    ,toolbar: "#toolbarMenu"
+                    ,height: 450
+                    ,data: dataList
+                    ,limit:dataList.length
+                    //page:false
+                    ,cols: [[ //表头
+                        {field: 'Id', title: '编号', width: 80, sort: true, fixed: 'left'}
+                        , {field: 'username', title: '用户名', width: 80,edit: 'text'}
+                        , {field: 'gender', title: '性别', width: 80, edit: 'text'}
+                        , {field: 'password', title: '密码', width: 80, edit: 'text'}
+                        , {field: 'address', title: '地址', width: 80, edit: 'text'}
+                        , {field: 'email', title: '邮箱', width: 80, edit: 'text'}
+                        , {field: 'phone', title: '电话', width: 80, edit: 'text'}
+                        , {field: '', title: '编辑', width: 250, sort: true, toolbar:'#toolbarDemo'}
+                    ]],
+                    loading:true,
+                    done:function (res, curr, count) {
+                        // $("[data-field='status']").children().each(function(){
+                        //     if($(this).text()==0){
+                        //         $(this).text("") ;//🔐
+                        //         //debugger;
+                        //     }else if($(this).text()==1){
+                        //         debugger;
+                        //         $(this).text("🔒")  ;//🔒
+                        //     }
+                        // });
+                        // $("[data-field='attachmentList']").children().each(function(e){
+                        //     if($(this).text()=="[object Object]"){
+                        //         $(this).text("查看附件");
+                        //     }
+                        // });
+                    },
+                    parseData:function(res){
+                        return {
+                            "code" : res.code, //解析接口状态
+                            "msg" : res.msg, //解析提示文本
+                            "data" : res.data //解析数据列表
+                        }
+                    }
+                });
+
+                //监听单元格编辑
+                // table.on('edit(test_table)',
+                //     function (obj) {
+                //         var value = obj.value //得到修改后的值
+                //             ,
+                //             data = obj.data //得到所在行所有键值
+                //             ,
+                //             field = obj.field; //得到字段
+                //         layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
+                //         //updateTable(data.pid,value);
+                //         var jsonResult = sensorServer.updateSensorInfo(obj.data);
+                //         console.log(jsonResult);
+                //     });
+
+                //监听行单击事件（双击事件为：rowDouble）
+                // table.on('row(test_table)', function(obj){
+                //     var data = obj.data;
+                //     layer.alert(JSON.stringify(data), {
+                //         title: '当前行数据：'
+                //     });
+                //
+                //     //标注选中样式
+                //     obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+                // });
+
+                //列里的工具栏
+                table.on('tool(test_table)',
+                    function(obj) {
+                        //var checkStatus = table.checkStatus(obj.config.pid);
+                        switch (obj.event) {
+                            case 'delete':
+                                layer.msg('data:'+obj.data.id);
+                                del(obj);
+                                break;
+                            case 'edit':
+                                layer.msg('data:'+obj.data.id);
+                                xadmin.open('修改记录','./ai_deliverRecord_AddOrEdit.html'+"?id="+obj.data.id,600,400);
+                                break;
+                                //updateWarningInfo(obj);
+                                //break;
+                            case 'uploadFile':
+                                layer.msg('data:'+obj.data.id);
+                                uploadDeliverRecordId=obj.data.id;
+                                $("#showFileListInfo").html("");
+                                $("#showUploadFile").show();
+                                //showUploadFile();
+                                break;
+                            case 'showPic':
+                                    //console.log(obj.data.id);
+                                    //showUploadFile();
+                                    //$("#showFileListInfo").html("");
+                                    //$("#showUploadFile").hide();
+                                    //let html="";
+                                    //debugger;
+                                    // if(obj.data.attachmentList.length>0){
+                                    //     for (let  i=0;i<obj.data.attachmentList.length;i++){
+                                    //         html+="<img style='width: 150px; height: 100px;' src='"+obj.data.attachmentList[i].url+"' />";
+                                    //     }
+                                    // }
+                                    // $("#showFileListInfo").html(html);
+                                    break;
+                             case 'lockData':
+                                 // let msg="确定要锁定吗？锁定后不可进行任何更改！";
+                                 // layer.confirm(msg,function(index) {
+                                 //     obj.data.status=1;
+                                 //     let result=sensorServer.updateDeliverRecord(obj.data);
+                                 //     if(result==1){
+                                 //         layer.msg('已锁定!',{icon:1,time:1000});
+                                 //         location.reload();
+                                 //     }else{
+                                 //         layer.msg('锁定失败!',{icon:2,time:1000});
+                                 //     }
+                                 // });
+                                 break;
+                        };
+                    });
+            });
+        }
+
+        function initData(){
+            var initData=getData(1,10);
+            var total=initData.total;
+            var dataList=initData.data;
+            layui.use('table', function(){
+                var laypage = layui.laypage;
+                //执行一个laypage实例
+                laypage.render({
+                    elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
+                    ,count: total //数据总数，从服务端得到
+                    //,limit:10
+                    ,limits:[10,20,30]
+                    ,curr:1
+                    ,group:5
+                    ,layout: ['prev', 'page', 'next','limit','refresh','skip','count']
+                    ,jump: function(obj, first){
+                        //obj包含了当前分页的所有参数，比如：
+                        console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                        console.log(obj.limit); //得到每页显示的条数
+                        //首次不执行
+                        if(!first){
+                            refData(getData(obj.curr,obj.limit).data);
+                        }else{
+                            refData(dataList);
+                        }
+
+                    }
+                });
+            });
+        }
+
+
+        //删除
+        function del(obj) {
+            //var params={"pids":[obj.data.pid]}
+            let msg="确定要删除吗？";
+            layer.confirm(msg,function(index) {
+                var params = obj.data;
+                var resultData = sensorServer.delDeliverRecord(params);
+                if (resultData == 1) {
+                    location.reload();
+                }
+            });
+        }
+
+        function  updateWarningInfo(obj){
+            obj.data.active=0;
+            msg="确认已阅读此警示，并进行相关处理吗？";
+            layer.confirm(msg,function(index){
+                var jsonResult = sensorServer.updateWarningInfo(obj.data);
+                layer.msg('已设置!',{icon:1,time:1000});
+                location.reload();
+            });
+        }
+
+        function showUploadFile(){
+            layer.open({
+                type: 1,
+                closeBtn: 1,
+                shift: 2,
+                area:['600px','400px'],
+                shadeClose: true,
+                content: $("#box1")
+            });
+        }
+    </script>
+
+
+</html>

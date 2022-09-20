@@ -182,6 +182,11 @@
                             $(this).text("已处理")
                         }
                     });
+                    $("[data-field='createTime']").children().each(function () {
+                        if ($(this).text() !=0&&$(this).text()!="时间") {
+                            $(this).text(dataServer.timestampToTime($(this).text()));
+                        }
+                    });
                 },
                 parseData: function (res) {
                     return {
