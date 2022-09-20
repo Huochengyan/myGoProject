@@ -30,7 +30,7 @@ type PcResource struct {
 	DiskPercent float64 `json:"diskPercent"`
 	//CPU使用 百分比
 	CpuPercent float64 `json:"cpuPercent"`
-	CreateTime int64   `json:"crateTime"`
+	CreateTime int64   `json:"createTime"`
 }
 
 /* LogLogin */
