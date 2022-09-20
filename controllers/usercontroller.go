@@ -14,6 +14,7 @@ import (
 	"myGoProjectNew/pkg/util"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 type UserC struct {
@@ -76,6 +77,10 @@ func (m UserC) Login(g *gin.Context) {
 				if err == nil {
 					info.Token = token
 				}
+				var loglogin models.LogLogin
+				loglogin.Ip = g.ClientIP()
+				loglogin.Username = elme.Username
+				addLoginLog(m, loglogin)
 				rsp.Msg = "success"
 				rsp.Code = 200
 				rsp.Data = info
@@ -353,4 +358,20 @@ func (m UserC) AddUser(g *gin.Context) {
 	g.JSON(http.StatusOK, rsp)
 	return
 
+}
+
+func addLoginLog(m UserC, info models.LogLogin) {
+	info.Id = primitive.NewObjectID()
+	info.CreateTime = time.Now().Unix()
+	result, err := m.Mgo.Collection(db.LogLogin).InsertOne(context.Background(), info)
+	if err == nil {
+		fmt.Println(result.InsertedID)
+	}
+
+	//如果获取的客户端IP为 127.0.0.1 配置下Nginx
+	//location / {
+	//	proxy_pass http://127.0.0.1:8080;
+	//	proxy_set_header X-Real-IP $remote_addr;
+	//	proxy_set_header X-Forward-For $remote_addr;
+	//}
 }

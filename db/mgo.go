@@ -64,4 +64,5 @@ const (
 	Test1      string = "test1"
 	Test2      string = "test2"
 	PcInfo     string = "pcinfo"
+	LogLogin   string = "logLogin"
 )

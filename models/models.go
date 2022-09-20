@@ -11,7 +11,7 @@ type User struct {
 	Gender     int                `json:"gender"`
 	Email      string             `json:"email"`
 	Phone      string             `json:"phone"`
-	CreateTime int32              `json:"crateTime"`
+	CreateTime int64              `json:"crateTime"`
 }
 
 type PageHelper struct {
@@ -31,4 +31,13 @@ type PcResource struct {
 	//CPU使用 百分比
 	CpuPercent float64 `json:"cpuPercent"`
 	CreateTime int64   `json:"crateTime"`
+}
+
+/* LogLogin */
+type LogLogin struct {
+	Id         primitive.ObjectID `bson:"_id"`
+	Username   string             `json:"username"`
+	Type       string             `json:"type"`
+	Ip         string             `json:"ip"`
+	CreateTime int64              `json:"crateTime"`
 }

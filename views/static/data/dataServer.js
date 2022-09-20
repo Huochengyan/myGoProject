@@ -107,5 +107,10 @@ var dataServer= {
         $.ajaxSettings.async = false;
         return dataServer.postServerData(url, postData);
     },
+    getLoginLogList:function (postData) {
+        var url = serverUrl + "/log/getLoginLogList";
+        $.ajaxSettings.async = false;
+        return dataServer.postServerData(url, postData);
+    },
 
 }

@@ -97,6 +97,14 @@ func InitRouter() (router *gin.Engine) {
 			pcinfo.POST("getPcResourceList", t1.GetPcResourceList)
 		}
 	}
+
+	logRouter := router.Group("/v1/log/")
+	{
+		logRouter.Use(jwt.JWT())
+		{
+			logRouter.POST("getLoginLogList", t1.GetLoginLogList)
+		}
+	}
 	//v2 := router.Group("/file")
 	//{
 	//	v2.POST("/uploadfile", controllers.Uploadfile)
