@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #rm *.bin
 
-version=2.0
+version=3.0
 #静态编译
 go build --ldflags "-extldflags -static" -o mygoproject.bin main.go
 
