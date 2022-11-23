@@ -25,6 +25,11 @@ var dataServer= {
             headers: {'Access-Control-Allow-Origin': '*', "token": localStorage.getItem("token")}, //请求成功的回调函数
             success: function (data) {
                 //函数参数 "data" 为请求成功服务端返回的数据
+                if(data.code==201)
+                {
+                    alert("服务器错误！！");
+                    return;
+                }
                 serverResultData = data.data;
             },error:function(XMLHttpRequest, textStatus, errorThrown, data){
                 if(XMLHttpRequest.responseJSON.code==2002||XMLHttpRequest.responseJSON.code==2003){

@@ -38,6 +38,17 @@
                             <input type="text" id="L_deviceIp" name="username" required="" lay-verify="username" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
+                        <label for="select_sex" class="layui-form-label">
+                            <span class="x-red">*</span>性别</label>
+                        <div class="layui-input-inline">
+                            <select id="select_sex" style="width: 100px;height: 20px">
+                                <option value="">请选择</option>
+                                <option value="1">男</option>
+                                <option value="2">女</option>
+                            </select>
+
+                        </div>
+                    <div class="layui-form-item">
                         <label for="select_address" class="layui-form-label">
                             <span class="x-red">*</span>位置</label>
                         <div class="layui-input-inline">
@@ -91,7 +102,6 @@
                 if (dataSensor!=null) {
                     let optionList="";
                     for(let i=0;i<dataSensor.data.length;i++){
-                        // optionList+="<option value='"+dataSensor.data[i].deviceid+"'>"+dataSensor.data[i].devicelocation+"-"+dataSensor.data[i].deviceid+"</option>";
                         optionList+="<option value='"+dataSensor.data[i].pid+"'>"+dataSensor.data[i].devicelocation+"-"+dataSensor.data[i].deviceid+"</option>";
                     }
                     $("#select_address").append(optionList);
@@ -126,6 +136,7 @@
                             function(data) {
                                 console.log(data);
                                 var sensorPid=$("#select_address").val();
+                                data.field.gender=parseInt($('#select_sex').val());
                                 let result=dataServer.addUserInfo(data.field);
                                 console.log(result);
                                 let msg="操作完成";

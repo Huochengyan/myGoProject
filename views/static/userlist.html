@@ -167,7 +167,7 @@
                 , cols: [[ //表头
                     {field: 'Id', title: '编号', width: 80, sort: true, fixed: 'left'}
                     , {field: 'username', title: '用户名', width: 80,edit: 'text'}
-                    , {field: 'gender', title: '性别', width: 80, edit: 'text'}
+                    , {field: 'gender', title: '性别', width: 100, edit: 'text'}
                     , {field: 'password', title: '密码', width: 80, edit: 'text'}
                     , {field: 'address', title: '地址', width: 80, edit: 'text'}
                     , {field: 'email', title: '邮箱', width: 80, edit: 'text'}
@@ -186,16 +186,16 @@
                         }
                     });
                     $("[data-field='gender']").children().each(function () {
-                        if ($(this).text() ==0) {
-                            $(this).text("👩");
-                        }else if ($(this).text() ==1) {
-                            $(this).text("👨");
-                        }else {
-                            $(this).text("无");
+                        if($(this).text()!='性别') {
+                            if ($(this).text() == 2) {
+                                $(this).text("👩");
+                            } else if ($(this).text() == 1) {
+                                $(this).text("👨");
+                            } else {
+                                $(this).text("未知");
+                            }
                         }
                     });
-
-
                 },
                 parseData: function (res) {
                     return {

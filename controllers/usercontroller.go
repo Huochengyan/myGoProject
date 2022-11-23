@@ -335,6 +335,7 @@ func (m UserC) AddUser(g *gin.Context) {
 	if info.Id.String() == "" {
 		rsp.Msg = "id is empty!"
 		rsp.Code = 201
+		rsp.Data = 0
 		g.JSON(http.StatusOK, rsp)
 		return
 	}

@@ -114,13 +114,14 @@
             });
         })
         function  login() {
-
+            debugger;
             var formData = new FormData();
             formData.append("username",$('input[name="username"]').val())
             formData.append("password",$('input[name="password"]').val())
             let params={};
             let result=dataServer.login({"username":$('input[name="username"]').val(),"password":$('input[name="password"]').val()});
             if(result!=null){
+                debugger;
                 localStorage.setItem("token",result.Token);
                 location.href = 'index.html';
                 localStorage.setItem("myproject_username",$('input[name="username"]').val());
