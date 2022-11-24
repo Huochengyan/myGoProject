@@ -5,6 +5,7 @@ import (
 	"github.com/go-ini/ini"
 	"github.com/robfig/cron"
 	log "github.com/sirupsen/logrus"
+	"myGoProjectNew/controllers"
 	"myGoProjectNew/myProjectUtils"
 	"myGoProjectNew/routers"
 	"os/exec"
@@ -22,7 +23,7 @@ func main() {
 	}
 
 	myProjectUtils.Config = cfg
-
+	controllers.InitServer()
 	router := routers.InitRouter()
 	//定时器应用
 	cronInit()

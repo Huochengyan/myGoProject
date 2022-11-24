@@ -87,6 +87,10 @@ var dataServer= {
         $.ajaxSettings.async = false;
         return dataServer.postServerData(url, postData);
     },
+    //获取上传上传文件URL
+    getUploadFileUrl: function () {
+        return url = serverUrl + "/file/upload";
+    },
     //获取传感器数据 list
     getSensorList: function (postData) {
         var url = serverUrl + "/sensor/list";

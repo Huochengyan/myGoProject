@@ -36,6 +36,12 @@
                             <span class="x-red">*</span>用户名:</label>
                         <div class="layui-input-inline">
                             <input type="text" id="L_deviceIp" name="username" required="" lay-verify="username" autocomplete="off" class="layui-input"></div>
+                        <label for="L_deviceIp" class="layui-form-label">
+                            <span class="x-red">*</span>头像:</label>
+                        <div class="layui-input-inline">
+                            <input type="file"  id="file_1" onchange="uploadFile()"/>
+                        </div>
+
                     </div>
                     <div class="layui-form-item">
                         <label for="select_sex" class="layui-form-label">
@@ -97,6 +103,7 @@
             // $(function () {
             //     initSelectData();
             // });
+            var HeaderIcon="";
             $(document).ready(function () {
                 var dataSensor=sensorServer.getSensorList({"page":1,"rows":1000});
                 if (dataSensor!=null) {
@@ -109,7 +116,6 @@
                 initSelectData();
             });
             function  initSelectData() {
-
                 layui.use(['form', 'layer','jquery'],
                     function() {
                         $ = layui.jquery;
@@ -137,6 +143,7 @@
                                 console.log(data);
                                 var sensorPid=$("#select_address").val();
                                 data.field.gender=parseInt($('#select_sex').val());
+                                data.field.headerIcon=HeaderIcon;
                                 let result=dataServer.addUserInfo(data.field);
                                 console.log(result);
                                 let msg="操作完成";
@@ -154,11 +161,41 @@
                                     });
                                 return false;
                             });
-
                     });
-
             }
 
+            function uploadFile(){
+                    let formData = new FormData();
+                    formData.append("file", document.getElementById('file_1').files[0]);
+                    let url=dataServer.getUploadFileUrl();
+                    $.ajax({
+                        url:url,
+                        type:"post",
+                        data:formData,
+                        processData:false,
+                        contentType:false,
+                        success:function(data){
+                            console.log(JSON.stringify(data));
+                            if(data.code!=200) {
+                                layer.msg("上传失败！");
+                                return;
+                            }
+                            if(data.msg=="success"&&data.data!=null){
+                                let resultData=data.data;
+                                    let url=resultData.key;
+                                layer.msg(url);
+                                HeaderIcon=url;
+                            }else{
+                                alert(JSON.stringify(data));
+                                layer.msg("上传失败！");
+                            }
+                        },
+                        error:function(e){
+                            alert("错误！！");
+
+                        }
+                    });
+            }
         </script>
     </body>
 

@@ -198,10 +198,10 @@ func (m UserC) GetUserList(g *gin.Context) {
 
 	//排序 正序1 倒序-1  ----------------------------
 	//opts := new(options.FindOptions)
-	//sortMap := make(map[string]interface{})
-	//sortMap["gender"] = -1
-	//opts.Sort = sortMap
-	//opts.Limit=int64(limit)
+	sortMap := make(map[string]interface{})
+	sortMap["crateTime"] = -1
+	opts.Sort = sortMap
+	//opts.Limit = int64(limit)
 	//排序 正序1 倒序-1  ----------------------------
 
 	//var users []models.User
@@ -212,13 +212,14 @@ func (m UserC) GetUserList(g *gin.Context) {
 			elme := new(models.User)
 			err := cur.Decode(elme)
 			if err == nil {
+				if elme.HeaderIcon != "" {
+					elme.HeaderIcon = QINIU_domainName + "/" + elme.HeaderIcon
+				}
 				users = append(users, *elme)
 			}
 		}
 	}
-
 	sCount, _ := m.Mgo.Collection(db.User).CountDocuments(context.Background(), filter)
-
 	var resultData models.UserList
 	resultData.Data = users
 	resultData.Total = sCount

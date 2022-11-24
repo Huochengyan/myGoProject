@@ -12,6 +12,7 @@ type User struct {
 	Email      string             `json:"email"`
 	Phone      string             `json:"phone"`
 	Status     string             `json:"status"`
+	HeaderIcon string             `json:"headerIcon"`
 	CreateTime int64              `json:"crateTime"`
 }
 

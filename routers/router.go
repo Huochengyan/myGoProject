@@ -66,6 +66,7 @@ func InitRouter() (router *gin.Engine) {
 	router.GET("/v1/auth", api.GetAuth)
 
 	t1 := controllers.UserC{Mgo: db.InitMongoDB2()}
+	t2 := controllers.FileC{Mgo: db.InitMongoDB2()}
 	//r1 := controllers.RoleC{Mgo: db.InitMongoDB2()}
 	//use mongo db
 	v1 := router.Group("/v1/user/")
@@ -105,6 +106,16 @@ func InitRouter() (router *gin.Engine) {
 			logRouter.POST("getLoginLogList", t1.GetLoginLogList)
 		}
 	}
+
+	fileRouter := router.Group("/v1/file/")
+	{
+		//logRouter.Use(jwt.JWT())
+		//{
+		//fileRouter.POST("upload", t2.Uploadfile)
+		fileRouter.POST("upload", t2.UploadFileQiNiu)
+		//}
+	}
+
 	//v2 := router.Group("/file")
 	//{
 	//	v2.POST("/uploadfile", controllers.Uploadfile)

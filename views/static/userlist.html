@@ -20,6 +20,18 @@
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <style>
+        .layui-table-cell {
+            text-align: center;
+            height: auto;
+            white-space: normal;
+        }
+
+        .layui-table img {
+            max-width: 80px;
+        }
+    </style>
 </head>
 
 <body class="">
@@ -59,7 +71,7 @@
         <!--            <button class = "layui-btn layui-btn-sm" lay-event = "getCheckData" > 获取选中行数据 </button>-->
         <!--            <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button >-->
         <button class="layui-btn layui-btn-sm" lay-event="addSensor"
-                onclick="xadmin.open('新增用户','./userlist-add.html',600,400)"> 新增用户
+                onclick="xadmin.open('新增用户','./userlist-add.html',900,450)"> 新增用户
         </button>
         <button class="layui-btn layui-btn-danger" lay-event="delCheckData"><i class="layui-icon"></i>删除选中</button>
     </div>
@@ -166,6 +178,7 @@
                 //page:false
                 , cols: [[ //表头
                     {field: 'Id', title: '编号', width: 80, sort: true, fixed: 'left'}
+                     , {field: 'headerIcon', title: '头像',width: 80,templet:'<div><img onclick="showBgPic(this)" src="{{d.headerIcon}}" ></div>'} //,templet:'<div><img onclick="showBgPic(this)" src="{{d.url}}" ></div>'
                     , {field: 'username', title: '用户名', width: 80,edit: 'text'}
                     , {field: 'gender', title: '性别', width: 100, edit: 'text'}
                     , {field: 'password', title: '密码', width: 80, edit: 'text'}
@@ -265,7 +278,22 @@
             location.reload();
         }
     }
-
+    function showBgPic(img) {
+        let content = '<img src="' + img.src + '" />';
+        if (".mp4" == img.src.substr(img.src.length - 4)) {
+            content = '<video width="580px" height="380px" src="' + img.src + '" controls="controls">\n' +
+                '您的浏览器不支持 video 标签。\n' +
+                '</video>';
+        }
+        layer.open({
+            type: 1,
+            closeBtn: 1,
+            shift: 2,
+            area: ['800px', '400px'],
+            shadeClose: true,
+            content: content
+        });
+    }
 </script>
 </body>
 
