@@ -113,6 +113,7 @@ func (m FileC) UploadFileQiNiu(g *gin.Context) {
 		fmt.Println(err)
 		return
 	}
+	os.Remove(uploadFilePath)
 	fmt.Println(ret.Key, ret.Hash)
 	rsp := new(Rsp)
 	rsp.Msg = "success"
