@@ -24,12 +24,12 @@
     <style>
         .layui-table-cell {
             text-align: center;
-            height: auto;
+            height: 30px;
             white-space: normal;
         }
 
         .layui-table img {
-            max-width: 80px;
+            max-width: 30px;
         }
     </style>
 </head>
@@ -55,6 +55,10 @@
     <div class="layui-fluid">
         <div class="layui-row layui-col-space15">
             <div class="layui-col-md12">
+                <div class="layui-card">
+                     <span>姓名：</span><input type="text"  id="input_username" />
+                    <input type="button" value="查询" class="layui-btn layui-icon-search" onclick="searchData()"/>
+                </div>
                 <div class="layui-card">
                     <div class="layui-card-body ">
                         <table id="demo" class="layui-table" lay-filter="test_table"></table>
@@ -123,11 +127,16 @@
         initData();
     });
 
+    function searchData(){
+        initData();
+    }
+
     //请求数据
     function getData(page, limit) {
         var resultData;
         // let sensorPid=$("#select_address").val();
-        var params = {"pageIndex": page, "pageSize": limit}
+        let username=$("#input_username").val();
+        var params = {"pageIndex": page, "pageSize": limit,"username":username};
         resultData = dataServer.getUserList(params);
         return resultData;
     }
@@ -178,7 +187,7 @@
                 //page:false
                 , cols: [[ //表头
                     {field: 'Id', title: '编号', width: 80, sort: true, fixed: 'left'}
-                     , {field: 'headerIcon', title: '头像',width: 80,templet:'<div><img onclick="showBgPic(this)" src="{{d.headerIcon}}" ></div>'} //,templet:'<div><img onclick="showBgPic(this)" src="{{d.url}}" ></div>'
+                     , {field: 'headerIcon', title: '头像',width: 220,templet:'<div><img onclick="showBgPic(this)" src="{{d.headerIcon}}" ></div>'} //,templet:'<div><img onclick="showBgPic(this)" src="{{d.url}}" ></div>'
                     , {field: 'username', title: '用户名', width: 80,edit: 'text'}
                     , {field: 'gender', title: '性别', width: 100, edit: 'text'}
                     , {field: 'password', title: '密码', width: 80, edit: 'text'}

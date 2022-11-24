@@ -12,3 +12,9 @@ type LoginInfo struct {
 	User  *models.User
 	Token string
 }
+
+type GetUserListParams struct {
+	PageIndex int    `json:"pageIndex"`
+	PageSize  int    `json:"pageSize"`
+	Username  string `json:"username"`
+}

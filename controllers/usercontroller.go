@@ -165,16 +165,16 @@ func (m UserC) GetUserList(g *gin.Context) {
 	//pageSize := g.PostForm("pageSize")
 	//fmt.Println(pageIndex+pageSize)
 
-	var info models.PageHelper
-	err := g.BindJSON(&info)
+	var params GetUserListParams
+	err := g.BindJSON(&params)
 	if err != nil {
 		rsp.Msg = "json faild"
 		rsp.Code = 201
 		g.JSON(http.StatusOK, rsp)
 		return
 	}
-	page := info.PageIndex
-	pageSize := info.PageSize
+	page := params.PageIndex
+	pageSize := params.PageSize
 
 	/* 默认 */
 	if page == 0 {
@@ -190,8 +190,11 @@ func (m UserC) GetUserList(g *gin.Context) {
 	opts.Limit = &limit
 	opts.Skip = &skip
 
-	filter := bson.M{}
+	filter := bson.D{}
 
+	if params.Username != "" {
+		filter = bson.D{{"username", params.Username}}
+	}
 	//limit, err := strconv.Atoi(g.Query("limit"))
 	//page, err := strconv.Atoi(g.Query("page"))
 	//fmt.Println(page)
