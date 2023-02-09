@@ -2,7 +2,7 @@ module myGoProjectNew
 
 go 1.18
 
-require github.com/gin-gonic/gin v1.7.4
+require github.com/gin-gonic/gin v1.7.7
 
 require github.com/go-ini/ini v1.66.4
 
